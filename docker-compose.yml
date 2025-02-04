@@ -15,4 +15,4 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSAWORD: example
+      POSTGRES_PASSWORD: example
