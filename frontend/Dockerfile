@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY public public
 COPY src src
-COPY next-en.d.ts nex-env.d.ts
+COPY next-env.d.ts next-env.d.ts
 COPY tsconfig.json tsconfig.json
 COPY package.json package.json
 
