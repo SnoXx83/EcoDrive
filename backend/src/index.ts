@@ -5,7 +5,6 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { buildSchema } from "type-graphql";
 
-
 console.log("hello world");
 
 const start = async () => {

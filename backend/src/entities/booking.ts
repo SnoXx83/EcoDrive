@@ -28,11 +28,11 @@ export class Booking extends BaseEntity{
     booking_status: string;
 
     // Une réservation est effectuée par un seul utilisateur (passager).
-    @ManyToOne(()=> User, (user)=> user.bookings)
-    passenger: User;
+    // @ManyToOne(()=> User, (user)=> user.bookings)
+    // passenger: User;
 
-    // Une réservation est liée à un seul trajet.
-    @ManyToOne(()=> Trip, (trip)=> trip.bookings)
-    trip: Trip;
+    // // Une réservation est liée à un seul trajet.
+    // @ManyToOne(()=> Trip, (trip)=> trip.bookings)
+    // trip: Trip;
 
 }

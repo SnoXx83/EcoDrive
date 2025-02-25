@@ -38,16 +38,16 @@ export class Trip extends BaseEntity {
     @Column()
     description: string;
 
-    @Field()
-    @Column()
-    status: string;
+    // @Field()
+    // @Column()
+    // status: string;
 
-    // Un trajet est créé par un seul utilisateur(conducteur).
-    @ManyToOne(() => User, (user) => user.trips)
-    driver: User;
+    // // Un trajet est créé par un seul utilisateur(conducteur).
+    // @ManyToOne(() => User, (user) => user.trips)
+    // driver: User;
 
-    // Un trajet peut avoir plusieurs réservations.
-    @OneToMany(()=> Booking, (booking)=> booking.trip)
-    bookings:Booking[];
+    // // Un trajet peut avoir plusieurs réservations.
+    // @OneToMany(()=> Booking, (booking)=> booking.trip)
+    // bookings:Booking[];
 
 }

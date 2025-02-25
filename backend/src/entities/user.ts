@@ -43,12 +43,12 @@ export class User extends BaseEntity{
     })
     user_type: UserType;
 
-// Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
-@OneToMany(()=> Trip, (trip)=> trip.driver)
-trips: Trip[]
+// // Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
+// @OneToMany(()=> Trip, (trip)=> trip.driver)
+// trips: Trip[]
 
-// Un utilisateur (passager) peut avoir plusieurs réservations.
-@OneToMany(()=> Booking, (booking)=> booking.passenger)
-bookings: Booking[];
+// // Un utilisateur (passager) peut avoir plusieurs réservations.
+// @OneToMany(()=> Booking, (booking)=> booking.passenger)
+// bookings: Booking[];
 
 }
