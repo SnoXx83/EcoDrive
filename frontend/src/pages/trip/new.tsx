@@ -48,7 +48,7 @@ const CreationTrip: React.FC = () => {
                 <br />
                 <label className='m-10'>
                     Description : <br />
-                    <textarea name="description" id="description" rows="5" cols="95"></textarea>
+                    <textarea name="description" id="description" rows="5"  cols="95"></textarea>
                 </label>
                 <br />
             <button className='btn' onSubmit={(e) => { e.preventDefault(); }}>Créer un trajet</button>

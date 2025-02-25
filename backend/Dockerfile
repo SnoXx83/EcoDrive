@@ -9,4 +9,6 @@ COPY config config
 COPY tsconfig.json tsconfig.json
 COPY src src
 
+RUN apk add --no-cache curl
+
 CMD npm start
