@@ -6,11 +6,12 @@ export interface Ville {
 }
 
 interface VilleProps {
+  name: string;
   label: string;
   onSelect: (ville: Ville) => void;
 }
 
-const VilleAutocomplete: React.FC<VilleProps> = ({ label, onSelect }) => {
+const VilleAutocomplete: React.FC<VilleProps> = ({ name, label, onSelect}) => {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<Ville[]>([]);
 
@@ -43,9 +44,9 @@ const VilleAutocomplete: React.FC<VilleProps> = ({ label, onSelect }) => {
 
   return (
     <div className='m-10 section_suggestions'>
-      <label htmlFor={label}>{label} :</label>
+      <label htmlFor={label}>{name} :</label>
       <br />
-      <input name={label} type="text" id={label} value={inputValue} onChange={handleInputChange} />
+      <input  type="text" id={label} value={inputValue} onChange={handleInputChange} />
       <ul className='suggestions'>
         {suggestions.map((ville) => (
           <li key={ville.code} onClick={() => handleSuggestionClick(ville)}>

@@ -10,9 +10,9 @@ export class Trip extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Field()
-    @Column()
-    createdAt: Date;
+    // @Field()
+    // @Column()
+    // createdAt: Date;
 
     @Field()
     @Column()
@@ -29,6 +29,10 @@ export class Trip extends BaseEntity {
     @Field()
     @Column()
     available_place: string;
+
+    @Field()
+    @Column()
+    owner: string
 
     @Field()
     @Column()
