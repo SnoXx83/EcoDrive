@@ -8,8 +8,8 @@ export default function Header() {
                         </a>
                     </h1>
                     <div className="nav">
-                        <a href="/"> Trouver un trajet</a>
-                        <a href="/"> Publier un trajet</a>
+                        <a href="/trip/searchTrip"> Trouver un trajet</a>
+                        <a href="/trip/new"> Publier un trajet</a>
                     </div>
                 </div>
             </header>
