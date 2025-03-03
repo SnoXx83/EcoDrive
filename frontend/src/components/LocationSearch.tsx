@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export interface Ville {
   nom: string;
@@ -9,27 +9,29 @@ interface VilleProps {
   name: string;
   label: string;
   onSelect: (ville: Ville) => void;
+  initialValue?: string; // Ajout de la prop initialValue
 }
 
-const VilleAutocomplete: React.FC<VilleProps> = ({ name, label, onSelect}) => {
-  const [inputValue, setInputValue] = useState('');
+const LocationSearch: React.FC<VilleProps> = ({ name, label, onSelect, initialValue }) => {
+  const [inputValue, setInputValue] = useState<string>(initialValue || '');
   const [suggestions, setSuggestions] = useState<Ville[]>([]);
+  const initialValueRef = useRef(initialValue); // Ajout de useRef
 
   useEffect(() => {
-    const fetchVilles = async () => {
-      if (inputValue.length > 2) { // Déclencher la requête après 2 caractères
+    if (inputValue && inputValue !== initialValueRef.current && inputValue.length > 2) {
+      const fetchVilles = async () => {
         const response = await fetch(
           `https://geo.api.gouv.fr/communes?nom=${inputValue}&fields=nom,code`
         );
         const data = await response.json();
         setSuggestions(data);
-      } else {
-        setSuggestions([]);
-      }
-    };
+      };
 
-    const debounce = setTimeout(fetchVilles, 300); // Délai pour éviter les requêtes trop fréquentes
-    return () => clearTimeout(debounce); // Annuler le timeout si l'utilisateur tape plus vite
+      const debounce = setTimeout(fetchVilles, 300);
+      return () => clearTimeout(debounce);
+    } else {
+      setSuggestions([]);
+    }
   }, [inputValue]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +48,7 @@ const VilleAutocomplete: React.FC<VilleProps> = ({ name, label, onSelect}) => {
     <div className='m-10 section_suggestions'>
       <label htmlFor={label}>{name} :</label>
       <br />
-      <input  type="text" id={label} value={inputValue} onChange={handleInputChange} />
+      <input type="text" id={label} value={inputValue} onChange={handleInputChange} />
       <ul className='suggestions'>
         {suggestions.map((ville) => (
           <li key={ville.code} onClick={() => handleSuggestionClick(ville)}>
@@ -58,4 +60,7 @@ const VilleAutocomplete: React.FC<VilleProps> = ({ name, label, onSelect}) => {
   );
 };
 
-export default VilleAutocomplete;
+export default LocationSearch;
+
+
+

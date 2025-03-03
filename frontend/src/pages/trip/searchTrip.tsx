@@ -1,44 +1,6 @@
-// import VilleAutocomplete from "@/components/SearchBar";
-
-
-// export default function SearchTrip() {
-
-//     const {
-//             register,
-//             handleSubmit,
-//             formState: { errors, isSubmitting },
-//             setValue, // Ajout de setValue
-//             reset,
-//         } = useForm<Inputs>();
-
-//     const handleVilleDepartSelect = (ville: Ville) => {
-//             setValue("start_location", ville.nom); // Mise à jour de la valeur du formulaire
-//         };
-
-//         const handleVilleArriveeSelect = (ville: Ville) => {
-//             setValue("end_location", ville.nom); // Mise à jour de la valeur du formulaire
-//         };
-//     return (
-//         <>
-//             <form className='main' onSubmit={(e) => {
-//                 e.preventDefault();
-//             }}>
-//                 <div className='d-flex'>
-//                 <label className='m-10'>
-//                          Date & heure de départ : <br />
-//                          <input className="text-field" name="departure_time" type='datetime-local'/>
-//                      </label>
-//                      <VilleAutocomplete name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
-//                     <VilleAutocomplete name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
-//                 </div>
-//             </form>
-//         </>
-//     )
-// }
-
 import React, { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import VilleAutocomplete, { Ville } from '@/components/SearchBar';
+import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { GET_TRIPS_BY_CRITERIA } from '@/graphql/queries/queries';
 
 interface Trip {
@@ -90,7 +52,8 @@ const SearchTrips: React.FC = () => {
 
     return (
         <div className='main-search'>
-            <h2>Rechercher des trajets</h2>
+            <h2 className='m-10'>Rechercher des trajets</h2>
+            <br />
             <form onSubmit={(e) => {
                 e.preventDefault();
             }}>
@@ -103,8 +66,8 @@ const SearchTrips: React.FC = () => {
                             <input type="datetime-local" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)} />
                         </label>
                     </div>
-                    <VilleAutocomplete name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
-                    <VilleAutocomplete name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
+                    <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
+                    <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
                     <button className="btn" onClick={handleSearch} disabled={loading}>
                         Rechercher
                     </button>
@@ -139,10 +102,6 @@ const SearchTrips: React.FC = () => {
                                     </div>
                                     <div className='image'></div>
                                 </div>
-
-
-
-
                             </div>
                         ))}
                     </div>

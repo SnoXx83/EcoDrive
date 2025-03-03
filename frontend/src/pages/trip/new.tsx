@@ -1,4 +1,4 @@
-import VilleAutocomplete, { Ville } from '@/components/SearchBar';
+import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { CREATE_NEW_TRIP } from '@/graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
@@ -19,7 +19,7 @@ const CreationTrip: React.FC = () => {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-        setValue, // Ajout de setValue
+        setValue,
         reset,
     } = useForm<Inputs>();
 
@@ -63,39 +63,38 @@ const CreationTrip: React.FC = () => {
     return (
         <>
             <form className='main' onSubmit={handleSubmit(onSubmit)}>
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-            {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
-                 <div className='d-flex'>
-                     <label className='m-10'>
-                         Date & heure de départ : <br />
-                         <input className="text-field" type='datetime-local' {...register("departure_time")} />
-                     </label>
-                    <VilleAutocomplete name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
-                    <VilleAutocomplete name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
-
-                 </div>
-                 <br />
-                 <label className='m-10'>
-                     Nombre de place libre : <br />
-                     <input className="text-field" type='number' {...register("available_place")}/>
-                 </label>
-                 <br />
-                 <label className='m-10'>
-                     Prix : <br />
-                     <input className="text-field" type="text" {...register("price")} />
-                 </label>
-                 <br />
-                 <label className='m-10'>
-                     Auteur : <br />
-                     <input className="text-field" type="text" {...register("owner")} />
-                 </label>
-                 <label className='m-10'>
-                     Description : <br />
-                     <textarea id="description" {...register("description")} rows={5} cols={95}></textarea>
-                 </label>
-                 <br />
-                 <button className='btn' onSubmit={(e) => { e.preventDefault(); }}>Créer un trajet</button>
-             </form> 
+                {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+                {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
+                <div className='d-flex'>
+                    <label className='m-10'>
+                        Date & heure de départ : <br />
+                        <input className="text-field" type='datetime-local' {...register("departure_time")} />
+                    </label>
+                    <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
+                    <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
+                </div>
+                <br />
+                <label className='m-10'>
+                    Nombre de place libre : <br />
+                    <input className="text-field" type='number' {...register("available_place")} />
+                </label>
+                <br />
+                <label className='m-10'>
+                    Prix : <br />
+                    <input className="text-field" type="text" {...register("price")} />
+                </label>
+                <br />
+                <label className='m-10'>
+                    Auteur : <br />
+                    <input className="text-field" type="text" {...register("owner")} />
+                </label>
+                <label className='m-10'>
+                    Description : <br />
+                    <textarea id="description" {...register("description")} rows={5} cols={95}></textarea>
+                </label>
+                <br />
+                <button className='btn' onSubmit={(e) => { e.preventDefault(); }}>Créer un trajet</button>
+            </form>
         </>
     );
 };

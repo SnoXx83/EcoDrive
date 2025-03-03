@@ -23,11 +23,11 @@ export class TripResolver {
         }
 
         if (startLocation) {
-            where.start_location = Like(`%${startLocation}%`); // Recherche partielle si nécessaire
+            where.start_location = Like(`%${startLocation}%`); // Recherche partielle
         }
 
         if (endLocation) {
-            where.end_location = Like(`%${endLocation}%`); // Recherche partielle si nécessaire
+            where.end_location = Like(`%${endLocation}%`); 
         }
 
         return await Trip.find({ where });
@@ -46,5 +46,32 @@ export class TripResolver {
             description: tripData.description,
             // createdAt: new Date(), // Ajout de createdAt
         });
+    }
+
+    @Query(() => Trip, { nullable: true })
+    async getTripById(@Arg('id') id: number): Promise<Trip | null> {
+        return await Trip.findOne({ where: { id } });
+    }
+
+    @Mutation(() => Trip, { nullable: true })
+    async updateTrip(
+        @Arg('id') id: number,
+        @Arg('tripData') tripData: TripInput,
+    ): Promise<Trip | undefined> {
+        const trip = await Trip.findOne({ where: { id } });
+        if (!trip) {
+            return undefined; // Ou lancez une erreur
+        }
+
+        // Mise à jour des propriétés du trajet
+        trip.start_location = tripData.start_location;
+        trip.end_location = tripData.end_location;
+        trip.departure_time = tripData.departure_time;
+        trip.available_place = tripData.available_place;
+        trip.price = tripData.price;
+        trip.owner = tripData.owner;
+        trip.description = tripData.description;
+
+        return await Trip.save(trip);
     }
 }
