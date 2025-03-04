@@ -5,13 +5,14 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { buildSchema } from "type-graphql";
 import { TripResolver } from "./resolvers/Trip";
 import { HealthResolver } from "./resolvers/Health";
+import { UserResolver } from "./resolvers/User";
 
 console.log("hello world");
 
 const start = async () => {
     await dataSource.initialize();
     const schema = await buildSchema({
-      resolvers: [TripResolver, HealthResolver],
+      resolvers: [TripResolver, UserResolver ,HealthResolver],
     });
 
     const server = new ApolloServer({

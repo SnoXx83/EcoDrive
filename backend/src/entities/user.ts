@@ -3,10 +3,10 @@ import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "t
 import { Trip } from "./trip";
 import { Booking } from "./booking";
 
-enum UserType{
-    PASSENGER = 'passenger',
-    DRIVER = 'driver',
-}
+// enum UserType{
+//     PASSENGER = 'passenger',
+//     DRIVER = 'driver',
+// }
 
 @ObjectType()
 @Entity()
@@ -35,13 +35,13 @@ export class User extends BaseEntity{
     @Column()
     phone_number: string;
 
-    @Field()
-    @Column({
-        type: 'enum',
-        enum: UserType,
-        default: UserType.PASSENGER,
-    })
-    user_type: UserType;
+    // @Field()
+    // @Column({
+    //     type: 'enum',
+    //     enum: UserType,
+    //     default: UserType.PASSENGER,
+    // })
+    // user_type: UserType;
 
 // // Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
 // @OneToMany(()=> Trip, (trip)=> trip.driver)
