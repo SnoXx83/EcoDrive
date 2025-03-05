@@ -25,11 +25,15 @@ export class User extends BaseEntity{
 
     @Field()
     @Column()
+    imageUrl: string;
+
+    @Field()
+    @Column()
     email:string;
 
     @Field()
     @Column()
-    password: string;
+    hashedPassword: string;
 
     @Field()
     @Column()

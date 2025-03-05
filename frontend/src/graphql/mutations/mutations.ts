@@ -23,3 +23,14 @@ export const UPDATE_TRIP = gql`
     }
   }
 `;
+// Schéma mutation créer un User
+export const REGISTER_MUTATION = gql`
+  mutation Register($newUserData: UserInput!) {
+    register(newUserData: $newUserData) {
+      id
+      email
+      first_name
+      last_name
+    }
+  }
+`;

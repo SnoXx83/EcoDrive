@@ -44,4 +44,9 @@ export const GET_TRIP_BY_ID = gql`
   }
 `;
 
-
+// Query pour ce connecter
+export const LOGIN_QUERY = gql`
+    query Login($userData: LoginInput!) {
+        login(UserData: $userData)
+    }
+`;

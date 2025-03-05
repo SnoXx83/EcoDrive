@@ -1,14 +1,10 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { Trip } from "../entities/trip";
 import { TripInput } from "../inputs/trip";
 import { Like } from "typeorm";
 
 @Resolver()
 export class TripResolver {
-    @Query(() => [Trip])
-    async getAllUsers() {
-        return await Trip.find()
-    }
 
     @Query(() => [Trip], { nullable: 'items' })
     async getTripsByCriteria(
@@ -27,13 +23,13 @@ export class TripResolver {
         }
 
         if (endLocation) {
-            where.end_location = Like(`%${endLocation}%`); 
+            where.end_location = Like(`%${endLocation}%`);
         }
 
         return await Trip.find({ where });
     }
 
-
+    @Authorized()
     @Mutation(() => Trip)
     async createNewTrip(@Arg("TripData") tripData: TripInput) {
         return await Trip.save({
@@ -47,12 +43,13 @@ export class TripResolver {
             // createdAt: new Date(), // Ajout de createdAt
         });
     }
-
+    @Authorized()
     @Query(() => Trip, { nullable: true })
     async getTripById(@Arg('id') id: number): Promise<Trip | null> {
         return await Trip.findOne({ where: { id } });
     }
 
+    @Authorized()
     @Mutation(() => Trip, { nullable: true })
     async updateTrip(
         @Arg('id') id: number,

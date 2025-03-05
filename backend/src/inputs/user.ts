@@ -9,10 +9,13 @@ export class UserInput {
     last_name: string;
 
     @Field()
+    imageUrl: string;
+
+    @Field()
     email: string;
 
     @Field()
-    password?: string; // Mot de passe optionnel pour les mises à jour
+    password: string; // Mot de passe optionnel pour les mises à jour
 
     @Field()
     phone_number: string;
