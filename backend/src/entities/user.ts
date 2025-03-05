@@ -10,7 +10,7 @@ import { Booking } from "./booking";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity{
+export class User extends BaseEntity {
     @Field()
     @PrimaryGeneratedColumn()
     id: number;
@@ -28,8 +28,8 @@ export class User extends BaseEntity{
     imageUrl: string;
 
     @Field()
-    @Column()
-    email:string;
+    @Column({ unique: true })
+    email: string;
 
     @Field()
     @Column()
@@ -47,12 +47,12 @@ export class User extends BaseEntity{
     // })
     // user_type: UserType;
 
-// // Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
-// @OneToMany(()=> Trip, (trip)=> trip.driver)
-// trips: Trip[]
+    // // Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
+    // @OneToMany(()=> Trip, (trip)=> trip.driver)
+    // trips: Trip[]
 
-// // Un utilisateur (passager) peut avoir plusieurs réservations.
-// @OneToMany(()=> Booking, (booking)=> booking.passenger)
-// bookings: Booking[];
+    // // Un utilisateur (passager) peut avoir plusieurs réservations.
+    // @OneToMany(()=> Booking, (booking)=> booking.passenger)
+    // bookings: Booking[];
 
 }

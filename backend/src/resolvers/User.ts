@@ -23,14 +23,9 @@ export class UserResolver {
             newUser.email = newUserData.email;
             newUser.first_name = newUserData.first_name;
             newUser.last_name = newUserData.last_name;
-            newUser.imageUrl= newUserData.imageUrl;
+            newUser.imageUrl = newUserData.imageUrl;
             newUser.phone_number = newUserData.phone_number;
-            if (newUserData.password) {
-                newUser.hashedPassword = await argon2.hash(newUserData.password);
-
-            } else {
-                return "Password is required";
-            }
+            newUser.hashedPassword = await argon2.hash(newUserData.password);
             await newUser.save();
             return newUser;
         } catch (error) {
@@ -42,20 +37,15 @@ export class UserResolver {
     // Query pour se connecter
     @Query(() => String)
     async login(@Arg("UserData") UserData: LoginInput) {
-        try {
-            const user = await User.findOneByOrFail({ email: UserData.email });
-            if (
-                (await argon2.verify(user.hashedPassword, UserData.password)) === false
-            ) {
-                return "invalid password";
-            } else {
-                const token= jwt.sign({email: user.email}, "mysupersecretkey");
-                console.log("Token: ",token);
-                return token
-            }
-        } catch (error) {
-            console.log("error : ", error);
-            return "invalid credentials";
+        const user = await User.findOneByOrFail({ email: UserData.email });
+        if (
+            (await argon2.verify(user.hashedPassword, UserData.password)) === false
+        ) {
+            return "invalid password";
+        } else {
+            const token = jwt.sign({ email: user.email }, "mysupersecretkey");
+            console.log("Token: ", token);
+            return token
         }
     }
 }

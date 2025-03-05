@@ -17,9 +17,10 @@ const start = async () => {
         // Propriété qui vérifie pour chaque requête qui possède Authorized() si c'est bon
         authChecker: ({ context }) => {
             if (context.email) {
-                return true
+                return true;
+            } else {
+                return false;
             }
-            return false
         }
     });
 
