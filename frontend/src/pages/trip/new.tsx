@@ -1,8 +1,10 @@
 import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { CREATE_NEW_TRIP } from '@/graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
 
 type Inputs = {
     departure_time: string;
@@ -15,17 +17,24 @@ type Inputs = {
 }
 
 const CreationTrip: React.FC = () => {
+    const router = useRouter();
+    if (localStorage.getItem("jwt") === null) {
+        console.log("redirect to login page");
+        router.push("/login");
+      }
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
         setValue,
         reset,
+        setValue: setFormValue
     } = useForm<Inputs>();
 
     const [createNewTrip, { loading: createTripLoading, error: createTripError }] = useMutation(CREATE_NEW_TRIP);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
 
     const handleVilleDepartSelect = (ville: Ville) => {
         setValue("start_location", ville.nom); // Mise à jour de la valeur du formulaire

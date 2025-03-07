@@ -50,3 +50,13 @@ export const LOGIN_QUERY = gql`
         login(UserData: $userData)
     }
 `;
+
+export const GET_AUTH_INFO = gql`
+  query WhoAmI {
+    whoAmI {
+      isLoggedIn
+      email
+      role
+    }
+  }
+`;

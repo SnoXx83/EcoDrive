@@ -1,5 +1,6 @@
 import { InputType, Field } from "type-graphql";
 
+// Input d'inscription
 @InputType()
 export class UserInput {
     @Field()

@@ -1,17 +1,12 @@
-import { AuthContext } from "@/pages/_app";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext} from "react";
+import { UserContext } from "./Layout";
 
 export default function Header() {
-    const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext);
+    const authInfo = useContext(UserContext);
     const router = useRouter();
-
-    const handleLogout = () => {
-        localStorage.removeItem("jwt");
-        setIsLoggedIn(false);
-        router.push("/login");
-    };
+    
     return (
         <header className="header">
             <div className="main-menu">
@@ -21,7 +16,8 @@ export default function Header() {
                     </a>
                 </h1>
                 <div className="nav">
-                    {isLoggedIn ? (
+                    {/* Si isLoggedIn === true affiche ça */}
+                    {authInfo.isLoggedIn ? (
                         <>
                             <Link href="/trip/searchTrip">
                                 <span>Trouver un trajet</span>
@@ -29,8 +25,13 @@ export default function Header() {
                             <Link href="/trip/new">
                                 <span>Publier un trajet</span>
                             </Link>
-                            <button onClick={handleLogout}>Déconnexion</button>
+                            <button onClick={()=>{
+                                localStorage.removeItem("jwt");
+                                authInfo.refetchLogin();
+                                router.push("/");
+                            }}>Déconnexion</button>
                         </>
+                        // Sinon afffiche cela
                     ) : (
                         <>
                             <Link href="/login">

@@ -2,11 +2,8 @@ import { Field, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Trip } from "./trip";
 import { Booking } from "./booking";
+export type UserRoleType= "admin" | "passenger" | "driver";
 
-// enum UserType{
-//     PASSENGER = 'passenger',
-//     DRIVER = 'driver',
-// }
 
 @ObjectType()
 @Entity()
@@ -39,13 +36,12 @@ export class User extends BaseEntity {
     @Column()
     phone_number: string;
 
-    // @Field()
-    // @Column({
-    //     type: 'enum',
-    //     enum: UserType,
-    //     default: UserType.PASSENGER,
-    // })
-    // user_type: UserType;
+    @Column({
+        type: 'enum',
+        enum: ["admin", "passenger", "driver"],
+        default: "passenger",
+    })
+    role: UserRoleType;
 
     // // Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
     // @OneToMany(()=> Trip, (trip)=> trip.driver)

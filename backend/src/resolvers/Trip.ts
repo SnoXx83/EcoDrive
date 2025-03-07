@@ -1,7 +1,8 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Trip } from "../entities/trip";
 import { TripInput } from "../inputs/trip";
 import { Like } from "typeorm";
+import { TripUpdateInput } from "../inputs/TripUpdate";
 
 @Resolver()
 export class TripResolver {
@@ -31,18 +32,15 @@ export class TripResolver {
 
     @Authorized()
     @Mutation(() => Trip)
-    async createNewTrip(@Arg("TripData") tripData: TripInput) {
+    async createNewTrip(@Arg("TripData") tripData: TripInput,
+        @Ctx() ctx: { email: string }
+    ) {
         return await Trip.save({
-            start_location: tripData.start_location,
-            end_location: tripData.end_location,
-            departure_time: tripData.departure_time,
-            available_place: tripData.available_place,
-            owner: tripData.owner,
-            price: tripData.price,
-            description: tripData.description,
-            // createdAt: new Date(), // Ajout de createdAt
+            ...tripData,
+            owner: ctx.email,
         });
     }
+
     @Authorized()
     @Query(() => Trip, { nullable: true })
     async getTripById(@Arg('id') id: number): Promise<Trip | null> {
@@ -53,22 +51,15 @@ export class TripResolver {
     @Mutation(() => Trip, { nullable: true })
     async updateTrip(
         @Arg('id') id: number,
-        @Arg('tripData') tripData: TripInput,
+        @Arg('tripData') tripData: TripUpdateInput,
+        @Ctx() ctx: { email: string, role: string }
     ): Promise<Trip | undefined> {
-        const trip = await Trip.findOne({ where: { id } });
-        if (!trip) {
-            return undefined; // Ou lancez une erreur
+        const tripToUpdate = await Trip.findOneByOrFail({ id: id });
+        if (tripToUpdate.owner !== ctx.email && ctx.role !== "admin") {
+
+            throw new Error("You cannot edit this trip");
         }
-
-        // Mise à jour des propriétés du trajet
-        trip.start_location = tripData.start_location;
-        trip.end_location = tripData.end_location;
-        trip.departure_time = tripData.departure_time;
-        trip.available_place = tripData.available_place;
-        trip.price = tripData.price;
-        trip.owner = tripData.owner;
-        trip.description = tripData.description;
-
-        return await Trip.save(trip);
+        const newTripData: any = { ...tripData };
+        return await Trip.save({ id, ...newTripData });
     }
 }

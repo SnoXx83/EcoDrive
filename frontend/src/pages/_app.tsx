@@ -4,27 +4,17 @@ import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@ap
 import { setContext } from "@apollo/client/link/context";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
-import { createContext, Dispatch, SetStateAction, useState } from "react";
 
-// On définit un context initial avec un objet contenant 2 elements, le statut du User(connecté ou non) et une fonction(met a jour le boolean isLoggedIn)
-const initialContext: {
-  isLoggedIn: boolean;
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
-} = {
-  isLoggedIn: false,
-  setIsLoggedIn: () => { },
-};
-
-export const AuthContext = createContext(initialContext);
-
+//  création d'un lien HTTP pour se connecter au serveur GraphQL.
 const httpLink = createHttpLink({
   uri: "http://localhost:4000",
 });
 
+//  crée un lien Apollo qui modifie les headers des requêtes GraphQL.
 const authLink = setContext((_, { headers }) => {
-  // je récupère le token d'authentification du localstorage si il existe
+// A chaque requete il recupere le token JWT du localStorage
   const token = localStorage.getItem("jwt");
-  // Je retourne le headers au context pour que httpLink puisse les lires
+  // si token il existe, il ajoute un header authorization avec la valeur sinon header vide
   return {
     headers: {
       ...headers,
@@ -33,27 +23,25 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+// Création d'une instance Apollo client
 const client = new ApolloClient({
+  // combine les liens authLink et httpLink
   link: authLink.concat(httpLink),
+  // Creation d'un cache pour stocker les resultats des req Graphql
   cache: new InMemoryCache(),
 });
 
-
+// Composant App est le point d'entrée de l'app next.js
 function App({ Component, pageProps }: AppProps) {
-  console.log("localstorage jwt", localStorage.getItem("jwt"));
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("jwt") !== null
-  );
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-      <ApolloProvider client={client}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ApolloProvider>
-    </AuthContext.Provider>
+    <ApolloProvider client={client}>
+      {/* Le composant Layout gère l'etat d'authentification */}
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </ApolloProvider>
   );
 }
 
-// Disabling SSR
+// Charge dynamiquement le composant et desactive le rendu côté serveur
 export default dynamic(() => Promise.resolve(App), { ssr: false });

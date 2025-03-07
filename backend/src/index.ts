@@ -15,12 +15,21 @@ const start = async () => {
     const schema = await buildSchema({
         resolvers: [TripResolver, UserResolver, HealthResolver],
         // Propriété qui vérifie pour chaque requête qui possède Authorized() si c'est bon
-        authChecker: ({ context }) => {
-            if (context.email) {
-                return true;
-            } else {
-                return false;
+        authChecker: ({ context }, roles) => {
+            console.log("roles", roles);
+            if (roles.length > 0 && context.email) {
+                if (roles.includes(context.role)) {
+                    console.log("ok");
+                    return true;
+                } else {
+                    console.log("you are a user but you don t have the correct role");
+                    return false;
+                }
             }
+            if (roles.length === 0 && context.email) {
+                return true;
+            }
+            return false;
         }
     });
 
