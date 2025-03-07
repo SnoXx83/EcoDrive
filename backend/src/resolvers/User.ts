@@ -19,6 +19,7 @@ class UserInfo {
 @Resolver()
 export class UserResolver {
     // met en place AuthChecker dans index.ts pour vérifier
+    // Trouver tout les users
     @Authorized()
     @Query(() => [User])
     async getAllUsers() {
@@ -26,7 +27,7 @@ export class UserResolver {
         return result;
     }
 
-    // Mutation pour créer un User
+    // creation d'un User
     @Mutation(() => User)
     async register(@Arg("newUserData") newUserData: UserInput) {
         try {
@@ -45,7 +46,7 @@ export class UserResolver {
         }
     }
 
-    // Query pour se connecter
+    //  Se connecter
     @Query(() => String)
     async login(@Arg("UserData") UserData: LoginInput) {
         let payload: {email: string; role: UserRoleType};

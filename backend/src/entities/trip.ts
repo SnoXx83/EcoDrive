@@ -47,8 +47,9 @@ export class Trip extends BaseEntity {
     // status: string;
 
     // // Un trajet est créé par un seul utilisateur(conducteur).
-    // @ManyToOne(() => User, (user) => user.trips)
-    // driver: User;
+    @ManyToOne(() => User, (user) => user.trips)
+    driver: User;
+
 
     // // Un trajet peut avoir plusieurs réservations.
     // @OneToMany(()=> Booking, (booking)=> booking.trip)

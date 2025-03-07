@@ -2,6 +2,8 @@ import { Field, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Trip } from "./trip";
 import { Booking } from "./booking";
+
+
 export type UserRoleType= "admin" | "passenger" | "driver";
 
 
@@ -44,8 +46,9 @@ export class User extends BaseEntity {
     role: UserRoleType;
 
     // // Un utilisiateur(Conducteur) peut avoir plusieurs trajets.
-    // @OneToMany(()=> Trip, (trip)=> trip.driver)
-    // trips: Trip[]
+    @OneToMany(()=> Trip, (trip)=> trip.driver)
+    trips: Trip[]
+
 
     // // Un utilisateur (passager) peut avoir plusieurs réservations.
     // @OneToMany(()=> Booking, (booking)=> booking.passenger)
