@@ -1,9 +1,16 @@
 import Image from 'next/image';
 import logo from '../../public/images/6365344.jpg';
 import section2 from '../../public/images/10051772.jpg'
+import { useContext } from 'react';
+import { UserContext } from '@/components/Layout';
 
 
 export default function Home() {
+  const { userId } = useContext(UserContext);
+
+    if (userId) {
+        console.log("ID de l'utilisateur dans Layout :", userId);
+      }
   return (
     <>
       <div className="banner" style={{

@@ -19,7 +19,7 @@ interface Trip {
 const UpdateTrip: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const [tripId, setTripId] = useState<number | null>(null); //Nouvel état pour id
+    const [tripId, setTripId] = useState<number | null>(null);
 
     useEffect(() => {
         if (id && typeof id === 'string') {

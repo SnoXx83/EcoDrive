@@ -1,6 +1,6 @@
 import { InputType, Field } from "type-graphql";
 
-// Input d'inscription
+// Input d'inscription rename register
 @InputType()
 export class UserInput {
     @Field()
@@ -16,7 +16,7 @@ export class UserInput {
     email: string;
 
     @Field()
-    password: string; // Mot de passe optionnel pour les mises à jour
+    password: string;
 
     @Field()
     phone_number: string;

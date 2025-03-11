@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { GET_TRIPS_BY_CRITERIA } from '@/graphql/queries/queries';
+import Link from 'next/link';
+import { UserContext } from '@/components/Layout';
 
 interface Trip {
     id: string;
@@ -84,25 +86,27 @@ const SearchTrips: React.FC = () => {
                     <br />
                     <div>
                         {trips.map((trip) => (
-                            <div key={trip.id} className='form'>
-                                <div className='d-flex justify-between m-10 p-10'>
-                                    <div>
-                                        Départ : {trip.start_location}
+                            <Link href={`/booking/${trip.id}`} key={trip.id} >
+                                <div className='form'>
+                                    <div className='d-flex justify-between m-10 p-10'>
+                                        <div>
+                                            Départ : {trip.start_location}
+                                        </div>
+                                        <div>
+                                            {trip.departure_time}
+                                        </div>
                                     </div>
-                                    <div>
-                                        {trip.departure_time}
+                                    <div className='d-flex flex-end m-10 p-10'>
+                                        Prix : {trip.price}€
+                                    </div>
+                                    <div className='d-flex justify-between item-center m-10 p-10'>
+                                        <div>
+                                            Arrivée : {trip.end_location}
+                                        </div>
+                                        <div className='image'></div>
                                     </div>
                                 </div>
-                                <div className='d-flex flex-end m-10 p-10'>
-                                    Prix : {trip.price}€
-                                </div>
-                                <div className='d-flex justify-between item-center m-10 p-10'>
-                                    <div>
-                                        Arrivée : {trip.end_location}
-                                    </div>
-                                    <div className='image'></div>
-                                </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>

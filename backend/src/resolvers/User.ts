@@ -1,5 +1,5 @@
 import { Arg, Authorized, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
-import { User, UserRoleType } from "../entities/user";
+import { User } from "../entities/user";
 import { UserInput } from "../inputs/user";
 import * as jwt from "jsonwebtoken";
 import * as argon2 from "argon2";
@@ -8,18 +8,19 @@ import { LoginInput } from "../inputs/login";
 // Input de connection
 @ObjectType()
 class UserInfo {
-  @Field()
-  isLoggedIn: boolean;
-  @Field({ nullable: true })
-  email: string;
-  @Field({ nullable: true })
-  role: string;
+    @Field()
+    isLoggedIn: boolean;
+    @Field({ nullable: true })
+    email: string;
+    @Field({ nullable: true })
+    role: string;
+    @Field({ nullable: true })
+    userId: number;
 }
 
 @Resolver()
 export class UserResolver {
-    // met en place AuthChecker dans index.ts pour vérifier
-    // Trouver tout les users
+    // Trouver tout les utilisateurs
     @Authorized()
     @Query(() => [User])
     async getAllUsers() {
@@ -48,36 +49,44 @@ export class UserResolver {
 
     //  Se connecter
     @Query(() => String)
-    async login(@Arg("UserData") UserData: LoginInput) {
-        let payload: {email: string; role: UserRoleType};
-        const user = await User.findOneByOrFail({ email: UserData.email });
-        if (
-            (await argon2.verify(user.hashedPassword, UserData.password)) === false
-        ) {
-            return "invalid password";
-        } else {
-            payload= { email: user.email, role: user.role};
-            const token = jwt.sign({ email: user.email, role: user.role }, "mysupersecretkey");
-            console.log("Token: ", token);
-            return token
+    async login(@Arg("UserData") UserData: LoginInput, @Ctx() ctx: any) {
+        try {
+            const user = await User.findOneByOrFail({ email: UserData.email });
+            if (!(await argon2.verify(user.hashedPassword, UserData.password))) {
+                return "invalid password";
+            } else {
+                const payload = { email: user.email, role: user.role };
+                const token = jwt.sign(payload, "mysupersecretkey");
+                return token;
+            }
+        } catch (error) {
+            console.error("Erreur lors de la connexion :", error);
+            return "Erreur lors de la connexion";
         }
     }
 
-    @Authorized("driver")
-    @Query(()=> String)
-    async driverQuery(){
-        return "you are a driver"; 
-    }
-
-    // Query qui vérifie si on est connecter ou non 
-    // @Ctx est un decorateur qui injecte le contexte dans la fonction
-    // ctx definit le type du context attendu
+    // Veririfie si la personne est connecté, l'user, email, et role 
     @Query(() => UserInfo)
     async whoAmI(@Ctx() ctx: { email: string; role: string }) {
-      if (ctx.email !== undefined) {
-        return { ...ctx, isLoggedIn: true };
-      } else {
-        return { isLoggedIn: false };
-      }
+        if (ctx.email !== undefined) {
+            try {
+                const user = await User.findOne({ where: { email: ctx.email } });
+                if (user) {
+                    return {
+                        isLoggedIn: true,
+                        userId: user.id,
+                        email: ctx.email,
+                        role: ctx.role,
+                    };
+                } else {
+                    return { isLoggedIn: false };
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'utilisateur :", error);
+                return { isLoggedIn: false };
+            }
+        } else {
+            return { isLoggedIn: false };
+        }
     }
 }

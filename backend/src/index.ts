@@ -5,16 +5,16 @@ import * as jwt from "jsonwebtoken";
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { buildSchema } from "type-graphql";
 import { TripResolver } from "./resolvers/Trip";
-import { HealthResolver } from "./resolvers/Health";
 import { UserResolver } from "./resolvers/User";
+import { BookingResolver } from "./resolvers/Booking";
 
 console.log("hello world");
 
 const start = async () => {
     await dataSource.initialize();
     const schema = await buildSchema({
-        resolvers: [TripResolver, UserResolver, HealthResolver],
-        // Propriété qui vérifie pour chaque requête qui possède Authorized() si c'est bon
+        resolvers: [TripResolver, UserResolver, BookingResolver],
+        // Propriété qui vérifie pour chaque requête qui possède Authorized() si OK
         authChecker: ({ context }, roles) => {
             console.log("roles", roles);
             if (roles.length > 0 && context.email) {
@@ -41,9 +41,7 @@ const start = async () => {
         listen: { port: 4000 },
         // On sait quel utilisateur fait la requête
         context: async ({ req }) => {
-            // console.log("headers", req.headers.authorization);
             const token = req.headers.authorization?.split("Bearer ")[1];
-            // console.log(token)
             if (token) {
                 const payload = jwt.verify(token, "mysupersecretkey");
                 console.log(payload);

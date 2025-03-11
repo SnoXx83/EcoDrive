@@ -15,10 +15,19 @@ query GetTripsByCriteria($departureTime: String, $startLocation: String, $endLoc
 }
 `;
 
+// Schema recup tout les trajets 
+// export const GET_ALL_TRIP = gql`
+//   query GetAllTrip() {
+//     getAllTrip() {
+//       start_location
+//     }
+//   }
+// `;
+
 
 // Schema trouver un trajet par l'id
 export const GET_TRIP_BY_ID = gql`
-  query GetTripById($id: Float!) {
+  query GetTripById($id: ID!) {
     getTripById(id: $id) {
       id
       departure_time
@@ -39,13 +48,14 @@ export const LOGIN_QUERY = gql`
     }
 `;
 
-// Schema authentification
+// Schema de verification
 export const GET_AUTH_INFO = gql`
-  query WhoAmI {
-    whoAmI {
-      isLoggedIn
-      email
-      role
-    }
+query WhoAmI {
+  whoAmI {
+    isLoggedIn
+    userId
+    email
+    role
   }
+}
 `;

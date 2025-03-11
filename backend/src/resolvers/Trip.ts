@@ -1,7 +1,7 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, ID, Mutation, Query, Resolver } from "type-graphql";
 import { Trip } from "../entities/trip";
 import { TripInput } from "../inputs/trip";
-import { Like } from "typeorm";
+import { Between, Like, MoreThanOrEqual } from "typeorm";
 import { TripUpdateInput } from "../inputs/TripUpdate";
 import { User } from "../entities/user";
 
@@ -16,9 +16,13 @@ export class TripResolver {
     ) {
         const where: any = {};
 
+        // if (departureTime) {
+        //     where.departure_time = departureTime;
+        // }
+        
         if (departureTime) {
-            where.departure_time = Like(`%${departureTime}$%`);
-        }
+            where.departure_time = MoreThanOrEqual(departureTime); // Utilisation de MoreThanOrEqual
+          }
 
         if (startLocation) {
             where.start_location = Like(`%${startLocation}%`); // Recherche partielle
@@ -37,12 +41,12 @@ export class TripResolver {
     async createNewTrip(@Arg("TripData") tripData: TripInput,
         @Ctx() ctx: { email: string }
     ) {
-        const user= await User.findOne({ where: { email: ctx.email, role: "driver"}});
-        if(!user){
+        const user = await User.findOne({ where: { email: ctx.email, role: "driver" } });
+        if (!user) {
             throw new Error("User not found or not a driver.");
         }
 
-        const trip= Trip.create({
+        const trip = Trip.create({
             ...tripData,
             driver: user,
         })
@@ -52,8 +56,15 @@ export class TripResolver {
     // Trouver un trajet par ID
     @Authorized()
     @Query(() => Trip, { nullable: true })
-    async getTripById(@Arg('id') id: number): Promise<Trip | null> {
-        return await Trip.findOne({ where: { id } });
+    async getTripById(@Arg('id', ()=> ID) id: string): Promise<Trip | null> {
+        return await Trip.findOne({ where: { id: parseInt(id) } });
+    }
+
+    // Trouver tout les trajets
+    @Query(() => [Trip], { nullable: true })
+    async getAllTrip() {
+        const result = await Trip.find();
+        return result;
     }
 
     // Modifier un trajet par ID

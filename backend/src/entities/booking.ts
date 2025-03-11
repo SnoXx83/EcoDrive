@@ -1,6 +1,5 @@
-
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user";
 import { Trip } from "./trip";
 
@@ -12,27 +11,25 @@ export class Booking extends BaseEntity{
     id: number;
 
     @Field()
-    @Column()
-    trip_id: string;
+    @CreateDateColumn()
+    createdAt: Date;
 
     @Field()
     @Column()
-    passager_id: string;
+    numberOfSeats: number;
 
     @Field()
     @Column()
-    number_of_seats: string;
-
-    @Field()
-    @Column()
-    booking_status: string;
+    bookingStatus: string;
 
     // Une réservation est effectuée par un seul utilisateur (passager).
-    // @ManyToOne(()=> User, (user)=> user.bookings)
-    // passenger: User;
+    @Field(()=> User)
+    @ManyToOne(()=> User, (user)=> user.bookings)
+    passenger: User;
 
     // // Une réservation est liée à un seul trajet.
-    // @ManyToOne(()=> Trip, (trip)=> trip.bookings)
-    // trip: Trip;
+    @Field(()=> Trip)
+    @ManyToOne(()=> Trip, (trip)=> trip.bookings)
+    trip: Trip;
 
 }

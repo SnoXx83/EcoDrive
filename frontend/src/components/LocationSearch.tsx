@@ -2,20 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 
 export interface Ville {
   nom: string;
-  code: string; // Ou d'autres propriétés de l'API
+  code: string;
 }
 
 interface VilleProps {
   name: string;
   label: string;
   onSelect: (ville: Ville) => void;
-  initialValue?: string; // Ajout de la prop initialValue
+  initialValue?: string;
 }
 
 const LocationSearch: React.FC<VilleProps> = ({ name, label, onSelect, initialValue }) => {
   const [inputValue, setInputValue] = useState<string>(initialValue || '');
   const [suggestions, setSuggestions] = useState<Ville[]>([]);
-  const initialValueRef = useRef(initialValue); // Ajout de useRef
+  const initialValueRef = useRef(initialValue);
 
   useEffect(() => {
     if (inputValue && inputValue !== initialValueRef.current && inputValue.length > 2) {
