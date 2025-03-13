@@ -15,15 +15,29 @@ query GetTripsByCriteria($departureTime: String, $startLocation: String, $endLoc
 }
 `;
 
-// Schema recup tout les trajets 
-// export const GET_ALL_TRIP = gql`
-//   query GetAllTrip() {
-//     getAllTrip() {
-//       start_location
-//     }
-//   }
-// `;
 
+
+export const GET_ALL_USERS = gql`
+  query GetAllUsers {
+    getAllUsers {
+      id
+      last_name
+      first_name
+      email
+    }
+  }
+`;
+
+export const GET_ALL_TRIPS= gql`
+  query GetAllTrips{
+    getAllTrips {
+      id
+      departure_time
+      start_location
+      end_location
+    }
+  }
+`
 
 // Schema trouver un trajet par l'id
 export const GET_TRIP_BY_ID = gql`

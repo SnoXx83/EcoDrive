@@ -48,7 +48,7 @@ export class Trip extends BaseEntity {
 
     // // Un trajet est créé par un seul utilisateur(conducteur).
     @Field()
-    @ManyToOne(() => User, (user) => user.trips)
+    @ManyToOne(() => User, (user) => user.trips, {onDelete: 'CASCADE'})
     driver: User;
 
 

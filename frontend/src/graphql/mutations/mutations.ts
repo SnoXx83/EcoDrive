@@ -55,3 +55,20 @@ export const CREATE_BOOKING = gql`
   }
 }
 `;
+
+
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: Float!) {
+    deleteUser(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_TRIP = gql`
+mutation DeleteTrip($id: Float!){
+  deleteTrip(id: $id){
+    id
+  }
+}
+`

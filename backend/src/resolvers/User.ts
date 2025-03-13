@@ -20,12 +20,28 @@ class UserInfo {
 
 @Resolver()
 export class UserResolver {
-    // Trouver tout les utilisateurs
+    // Trouver tout les utilisateurs pour admin
     @Authorized()
     @Query(() => [User])
     async getAllUsers() {
         const result = await User.find();
         return result;
+    }
+
+    @Mutation(()=> User, {nullable: true})
+    async deleteUser(@Arg("id") id: number){
+        try {
+            const user = await User.findOne({ where: { id } });
+            if(!user){
+                return null;
+            }
+            const deleteUser= {...user};
+            await user.remove();
+            return deleteUser;
+        } catch (error) {
+            console.error("Erreur lors de la suppression de l'utilisateur: ", error);
+            throw new Error("Erreur lors de la suppression de l'utilisateur.");
+        }
     }
 
     // creation d'un User

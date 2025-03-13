@@ -7,6 +7,32 @@ import { User } from "../entities/user";
 
 @Resolver()
 export class TripResolver {
+
+    // Trouver tout les trajets
+    @Authorized()
+    @Query(() => [Trip])
+    async getAllTrips() {
+        const result = await Trip.find();
+        return result;
+    }
+
+
+    @Mutation(()=> Trip, {nullable: true})
+    async deleteTrip(@Arg("id") id: number){
+        try {
+            const trip = await Trip.findOne({ where: { id } });
+            if(!trip){
+                return null;
+            }
+            const deletedTrip = {...trip};
+            await trip.remove();
+            return deletedTrip;
+        } catch (error) {
+            console.error("Erreur lors de la suppression du trajet: ", error);
+            throw new Error("Erreur lors de la suppression du trajet.");
+        }
+    }
+
     // Trouver les trajets selon la recherche 
     @Query(() => [Trip], { nullable: 'items' })
     async getTripsByCriteria(
@@ -15,10 +41,6 @@ export class TripResolver {
         @Arg('endLocation', { nullable: true }) endLocation?: string,
     ) {
         const where: any = {};
-
-        // if (departureTime) {
-        //     where.departure_time = departureTime;
-        // }
         
         if (departureTime) {
             where.departure_time = MoreThanOrEqual(departureTime); // Utilisation de MoreThanOrEqual
