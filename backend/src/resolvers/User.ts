@@ -4,6 +4,9 @@ import { UserInput } from "../inputs/user";
 import * as jwt from "jsonwebtoken";
 import * as argon2 from "argon2";
 import { LoginInput } from "../inputs/login";
+import { getRepository } from "typeorm";
+import { UpdateUserInput } from "../inputs/updateUser";
+import dataSource from "../../config/db";
 
 // Input de connection
 @ObjectType()
@@ -28,14 +31,14 @@ export class UserResolver {
         return result;
     }
 
-    @Mutation(()=> User, {nullable: true})
-    async deleteUser(@Arg("id") id: number){
+    @Mutation(() => User, { nullable: true })
+    async deleteUser(@Arg("id") id: number) {
         try {
             const user = await User.findOne({ where: { id } });
-            if(!user){
+            if (!user) {
                 return null;
             }
-            const deleteUser= {...user};
+            const deleteUser = { ...user };
             await user.remove();
             return deleteUser;
         } catch (error) {
@@ -106,12 +109,47 @@ export class UserResolver {
         }
     }
 
+    // Récupère un user par id
     @Query(() => User, { nullable: true })
     async getUserById(@Arg('id') id: number) {
-        const userId= id;
+        const userId = id;
         if (isNaN(userId)) {
             return null; // Gérer le cas où id n'est pas un nombre valide
         }
-        return User.findOne({ where: {id: userId} });
+        return User.findOne({ where: { id: userId } });
+    }
+
+    // Update le user
+    @Mutation(() => User)
+    async updateUserById(@Arg('id') id: number, @Arg('userData') userData: UpdateUserInput) {
+        try {
+            const userRepository = dataSource.getRepository(User);
+            let user = await userRepository.findOne({ where: { id } });
+            if (!user) {
+                return undefined;
+            }
+            if (userData.newPassword) {
+                if (!userData.oldPassword) {
+                    throw new Error('Veuillez fournir votre ancien mot de passe.');
+                }
+
+                const passwordMatch = await argon2.verify(user.hashedPassword, userData.oldPassword);
+                if (!passwordMatch) {
+                    throw new Error('Ancien mot de passe incorrect.');
+                }
+
+                const hashedPassword = await argon2.hash(userData.newPassword);
+                user.hashedPassword = hashedPassword;
+            }
+            userRepository.merge(user, userData);
+
+            user = await userRepository.save(user);
+
+            return user;
+
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+            throw new Error(`Impossible de mettre à jour l\'utilisateur:`);
+        }
     }
 }

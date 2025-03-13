@@ -16,7 +16,7 @@ query GetTripsByCriteria($departureTime: String, $startLocation: String, $endLoc
 `;
 
 
-
+// Recup tout les users
 export const GET_ALL_USERS = gql`
   query GetAllUsers {
     getAllUsers {
@@ -28,7 +28,8 @@ export const GET_ALL_USERS = gql`
   }
 `;
 
-export const GET_ALL_TRIPS= gql`
+// Recup tout les trips
+export const GET_ALL_TRIPS = gql`
   query GetAllTrips{
     getAllTrips {
       id
@@ -74,14 +75,16 @@ query WhoAmI {
 }
 `;
 
+// Recup un user par l'id
 export const GET_USER_BY_ID = gql`
   query GetUserById($id: Float!) {
     getUserById(id: $id) {
       id
       imageUrl
+      email
+      hashedPassword
       first_name
       last_name
-      email
       phone_number
       role
     }
