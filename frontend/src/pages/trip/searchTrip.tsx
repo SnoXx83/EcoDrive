@@ -9,6 +9,7 @@ import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { Controller, useForm } from 'react-hook-form';
+import { Box, Button, Divider, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 
 interface Trip {
     id: string;
@@ -52,7 +53,7 @@ const SearchTrips: React.FC = () => {
         setEndLocation(ville.nom);
     };
 
-    const handleSearch = (data: {departure_time: Dayjs | null}) => {
+    const handleSearch = (data: { departure_time: Dayjs | null }) => {
         getTrips({
             variables: {
                 // departureTime,
@@ -64,74 +65,58 @@ const SearchTrips: React.FC = () => {
     };
 
     return (
-        <div className='main-search'>
-            <h2 className='m-10'>Rechercher des trajets</h2>
-            <br />
+        <Box sx={{ padding: 4, maxWidth: 1100, margin: '0 auto' }}>
+            <Typography variant="h5" component="h2" gutterBottom>Rechercher des trajets</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <form onSubmit={handleSubmit(handleSearch)}>
-
-                <div className='p-10 d-flex justify-around item-center'>
-                <DemoContainer components={['DateTimePicker']}>
-                            <Controller
-                                name="departure_time"
-                                control={control}
-                                defaultValue={null}
-                                rules={{ required: 'La date et l\'heure de départ sont requises.' }}
-                                render={({ field }) => (
-                                    <DateTimePicker
-                                        label="Date & heure de départ"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        sx={{ m: 1 }}
-                                    />
-                                )}
-                            />
-                        </DemoContainer>
-                    <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
-                    <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
-                    <button className="btn" type="submit" disabled={loading}>
-                        Rechercher
-                    </button>
-                </div>
-            </form>
+                <Paper elevation={2} sx={{ padding: 2, marginBottom: 2 }}>
+                    <form onSubmit={handleSubmit(handleSearch)}>
+                        <Box display="flex" justifyContent="space-around" alignItems="center" padding={2}>
+                            <DemoContainer components={['DateTimePicker']} sx={{ paddingTop: 0 }}>
+                                <Controller
+                                    name="departure_time"
+                                    control={control}
+                                    defaultValue={null}
+                                    rules={{ required: 'La date et l\'heure de départ sont requises.' }}
+                                    render={({ field }) => (
+                                        <DateTimePicker
+                                            label="Date & heure de départ"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            sx={{ m: 1 }}
+                                        />
+                                    )}
+                                />
+                            </DemoContainer>
+                            <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
+                            <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
+                            <Button variant="contained" type="submit" disabled={loading}>Rechercher</Button>
+                        </Box>
+                    </form>
+                </Paper>
             </LocalizationProvider>
 
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-
-            {loading && <p>Chargement...</p>}
+            {errorMessage && <Typography color="error" gutterBottom>{errorMessage}</Typography>}
+            {loading && <Typography>Chargement...</Typography>}
 
             {trips.length > 0 && (
-                <div className='m-50'>
-                    <h3>Résultats de la recherche :</h3>
-                    <br />
-                    <div>
+                <Paper elevation={2} sx={{ padding: 2, marginTop: 2 }}>
+                    <Typography variant="h6" component="h3" gutterBottom>Résultats de la recherche :</Typography>
+                    <List>
                         {trips.map((trip) => (
-                            <Link href={`/booking/${trip.id}`} key={trip.id} >
-                                <div className='form'>
-                                    <div className='d-flex justify-between m-10 p-10'>
-                                        <div>
-                                            Départ : {trip.start_location}
-                                        </div>
-                                        <div>
-                                            {trip.departure_time}
-                                        </div>
-                                    </div>
-                                    <div className='d-flex flex-end m-10 p-10'>
-                                        Prix : {trip.price}€
-                                    </div>
-                                    <div className='d-flex justify-between item-center m-10 p-10'>
-                                        <div>
-                                            Arrivée : {trip.end_location}
-                                        </div>
-                                        <div className='image'></div>
-                                    </div>
-                                </div>
-                            </Link>
+                            <React.Fragment key={trip.id}>
+                                <ListItem component={Link} href={`/booking/${trip.id}`} button>
+                                    <ListItemText
+                                        primary={`Départ : ${trip.start_location} - Arrivée : ${trip.end_location}`}
+                                        secondary={`Date : ${trip.departure_time} - Prix : ${trip.price}€`}
+                                    />
+                                </ListItem>
+                                <Divider />
+                            </React.Fragment>
                         ))}
-                    </div>
-                </div>
+                    </List>
+                </Paper>
             )}
-        </div>
+        </Box>
     );
 };
 

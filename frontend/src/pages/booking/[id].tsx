@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_TRIP_BY_ID } from '@/graphql/queries/queries';
 import { CREATE_BOOKING } from '@/graphql/mutations/mutations';
 import { UserContext } from '@/components/Layout';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 
 interface Trip {
     id: string;
@@ -87,31 +88,31 @@ const Reservation: React.FC = () => {
     if (loading) return <p>Chargement...</p>;
     if (error) return <p>Erreur : {error.message}</p>;
     if (!trip) return <p>Trajet non trouvé.</p>;
-    
+
     return (
-        <div className="main reservation-page">
-            <div className='form'>
-                <h2>Réservation du trajet</h2>
-                <p>Départ : {trip.start_location}</p>
-                <p>Arrivée : {trip.end_location}</p>
-                <p>Heure de départ : {trip.departure_time}</p>
-                <p>Prix : {trip.price}</p>
-                <p>Places disponibles : {trip.available_place}</p>
-                <label>
-                    Nombre de places :
-                    <input
-                        type="number"
-                        value={numberOfSeats}
-                        onChange={(e) => setNumberOfSeats(parseInt(e.target.value))}
-                        min={1}
-                    />
-                </label>
-                <button onClick={handleBooking} disabled={bookingLoading}>
-                    Réserver
-                </button>
-                {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-            </div>
-        </div>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="#f0f0f0">
+            <Paper elevation={3} sx={{ padding: 5, minWidth: 800 }}>
+                <Typography variant="h5" component="h2" gutterBottom>Réservation du trajet</Typography>
+                <Typography>Départ : {trip.start_location}</Typography>
+                <Typography>Arrivée : {trip.end_location}</Typography>
+                <Typography>Heure de départ : {trip.departure_time}</Typography>
+                <Typography>Prix : {trip.price}</Typography>
+                <Typography>Places disponibles : {trip.available_place}</Typography>
+                <TextField
+                    label="Nombre de places"
+                    type="number"
+                    value={numberOfSeats}
+                    onChange={(e) => setNumberOfSeats(parseInt(e.target.value))}
+                    inputProps={{ min: 1 }}
+                    margin="normal"
+                    fullWidth
+                />
+                <Box mt={2} display="flex" justifyContent="center">
+                    <Button variant="contained" onClick={handleBooking} disabled={bookingLoading}>Réserver</Button>
+                </Box>
+                {errorMessage && <Typography color="error" mt={2}>{errorMessage}</Typography>}
+            </Paper>
+        </Box>
     );
 };
 

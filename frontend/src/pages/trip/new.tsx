@@ -1,7 +1,7 @@
 import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { CREATE_NEW_TRIP } from '@/graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { Button, TextField } from '@mui/material';
+import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -79,67 +79,46 @@ const CreationTrip: React.FC = () => {
     };
 
     return (
-        <>
+        <div className='m-50'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <form className='main' onSubmit={handleSubmit(onSubmit)}>
-                    {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-                    {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
-                    <div className='d-flex'>
-                        <DemoContainer components={['DateTimePicker']}>
-                            <Controller
-                                name="departure_time"
-                                control={control}
-                                defaultValue={null}
-                                rules={{ required: 'La date et l\'heure de départ sont requises.' }}
-                                render={({ field }) => (
-                                    <DateTimePicker
-                                        label="Date & heure de départ"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        sx={{ m: 1 }}
-                                    />
-                                )}
-                            />
-                        </DemoContainer>
-                        <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
-                        <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
-                    </div>
-                    <br />
-                    <TextField
-                        label="Nombre de places libres"
-                        type="number"
-                        {...register("available_place")}
-                        sx={{ m: 1 }}
-                    />
-                    <TextField
-                        label="Prix"
-                        type="text"
-                        {...register("price")}
-                        sx={{ m: 1 }}
-                    />
-                    <TextField
-                        label="Auteur"
-                        type="text"
-                        {...register("owner")}
-                        sx={{ m: 1 }}
-                    />
-                    <TextField
-                        label="Description"
-                        multiline
-                        rows={5}
-                        {...register("description")}
-                        sx={{ m: 1, width: '95%' }}
-                    />
-                    <br />
-                    <div className='d-flex justify-center'>
-                        <Button variant="contained" type="submit" sx={{ m: 1 }}>
-                            Créer un trajet
-                        </Button>
-
-                    </div>
-                </form>
+                <Paper elevation={3} sx={{ padding: 4, maxWidth: 650, margin: '0 auto' }}>
+                    <Typography variant="h5" component="h2" gutterBottom>Créer un trajet</Typography>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        {errorMessage && <Typography color="error" gutterBottom>{errorMessage}</Typography>}
+                        {successMessage && <Typography color="success" gutterBottom>{successMessage}</Typography>}
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <DemoContainer components={['DateTimePicker']}>
+                                <Controller
+                                    name="departure_time"
+                                    control={control}
+                                    defaultValue={null}
+                                    rules={{ required: 'La date et l\'heure de départ sont requises.' }}
+                                    render={({ field }) => (
+                                        <DateTimePicker
+                                            label="Date & heure de départ"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            sx={{ width: '100%' }}
+                                        />
+                                    )}
+                                />
+                            </DemoContainer>
+                            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
+                                <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
+                                <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
+                            </Box>
+                            <TextField label="Nombre de places libres" type="number" {...register("available_place")} />
+                            <TextField label="Prix" type="text" {...register("price")} />
+                            <TextField label="Auteur" type="text" {...register("owner")} />
+                            <TextField label="Description" multiline rows={5} {...register("description")} />
+                            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                                <Button variant="contained" type="submit">Créer un trajet</Button>
+                            </Box>
+                        </Box>
+                    </form>
+                </Paper>
             </LocalizationProvider>
-        </>
+        </div >
     );
 };
 

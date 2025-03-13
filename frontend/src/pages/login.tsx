@@ -1,7 +1,7 @@
 import { UserContext } from "@/components/Layout";
 import { LOGIN_QUERY } from "@/graphql/queries/queries";
 import { useLazyQuery } from "@apollo/client";
-import { Button, TextField } from "@mui/material";
+import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
@@ -18,41 +18,58 @@ export default function LoginPage() {
         },
     });
     return (
-        <div className="main">
-            <form onSubmit={async (e) => {
-                e.preventDefault();
-                const form = e.target;
-                const formData = new FormData(form as HTMLFormElement);
-                const formJson = Object.fromEntries(formData.entries());
+        <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            bgcolor="#f0f0f0"
+        >
+            <Paper elevation={4} sx={{ padding: 4, maxWidth: 600 }}>
+                <Typography className="text-center" variant="h5" component="h2" gutterBottom>
+                    Connexion
+                </Typography>
+                <form
+                    onSubmit={async (e) => {
+                        e.preventDefault();
+                        const form = e.target;
+                        const formData = new FormData(form as HTMLFormElement);
+                        const formJson = Object.fromEntries(formData.entries());
 
-                handleLogin({
-                    variables: {
-                        userData: formJson,
-                    },
-                });
-            }}>
-                <TextField
-                    required
-                    id="email"
-                    label="Email"
-                    variant="outlined"
-                    name="email"
-                    type="text"
-                    fullWidth
-                    margin="normal"
-                />
-                <TextField
-                    required
-                    id="password"
-                    label="Mot de passe"
-                    variant="outlined"
-                    name="password"
-                    type="password"
-                    fullWidth
-                    margin="normal"
-                />
-                <Button type="submit" onSubmit={(e) => { e.preventDefault(); }} variant="contained">Se connecter</Button>
-            </form>
-        </div>
+                        handleLogin({
+                            variables: {
+                                userData: formJson,
+                            },
+                        });
+                    }}
+                >
+                    <TextField
+                        required
+                        id="email"
+                        label="Email"
+                        variant="outlined"
+                        name="email"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                    />
+                    <TextField
+                        required
+                        id="password"
+                        label="Mot de passe"
+                        variant="outlined"
+                        name="password"
+                        type="password"
+                        fullWidth
+                        margin="normal"
+                    />
+                    <Box mt={2} display="flex" justifyContent="center">
+                        <Button type="submit" variant="contained">
+                            Se connecter
+                        </Button>
+                    </Box>
+                </form>
+            </Paper>
+        </Box>
     );
 }

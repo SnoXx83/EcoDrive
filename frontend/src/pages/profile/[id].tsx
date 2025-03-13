@@ -5,6 +5,7 @@ import { UserContext } from '@/components/Layout';
 import { GET_USER_BY_ID } from '@/graphql/queries/queries';
 import { useEffect } from 'react';
 import { useRouter as useNextRouter } from 'next/navigation';
+import { Avatar, Grid, Grid2, Paper, Typography } from '@mui/material';
 
 const ProfilePage = () => {
     const router = useRouter();
@@ -31,14 +32,55 @@ const ProfilePage = () => {
 
     return (
         <div className="main profile-page">
-            <h2>Profil de {user.email}</h2>
-            <p>ID : {user.id}</p>
-            <p>Rôle : {user.role}</p>
-
-            {user.imageUrl && <img src={user.imageUrl} alt="Profil" />}
-            {user.first_name && <p>Prénom : {user.first_name}</p>}
-            {user.last_name && <p>Nom : {user.last_name}</p>}
-            {user.phone_number && <p>Téléphone : {user.phone_number}</p>}
+            <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: '0 auto' }}>
+                <Grid2 container direction="column" alignItems="center" spacing={2}>
+                    <Grid2 container direction="column" spacing={1}  >
+                        {user.imageUrl ? (
+                            <Avatar src={user.imageUrl} alt="Profil" sx={{ width: 100, height: 100 }} />
+                        ) : (
+                            <Avatar sx={{ width: 100, height: 100 }}>{user.first_name ? user.first_name[0].toUpperCase() : user.email[0].toUpperCase()}</Avatar>
+                        )}
+                    </Grid2>
+                    <Grid2 container direction="column" spacing={1}>
+                        <Typography variant="h5" component="h2">
+                            Profil de {user.email}
+                        </Typography>
+                    </Grid2>
+                    <Grid2 container direction="column" spacing={1}>
+                        <Grid2 container direction="column" spacing={1}>
+                            <Typography variant="body1">
+                                <strong>ID :</strong> {user.id}
+                            </Typography>
+                        </Grid2>
+                        <Grid2 container direction="column" spacing={1}>
+                            <Typography variant="body1">
+                                <strong>Rôle :</strong> {user.role}
+                            </Typography>
+                        </Grid2>
+                        {user.first_name && (
+                            <Grid2 container direction="column" spacing={1}>
+                                <Typography variant="body1">
+                                    <strong>Prénom :</strong> {user.first_name}
+                                </Typography>
+                            </Grid2>
+                        )}
+                        {user.last_name && (
+                            <Grid2 container direction="column" spacing={1}>
+                                <Typography variant="body1">
+                                    <strong>Nom :</strong> {user.last_name}
+                                </Typography>
+                            </Grid2>
+                        )}
+                        {user.phone_number && (
+                            <Grid2 container direction="column" spacing={1}>
+                                <Typography variant="body1">
+                                    <strong>Téléphone :</strong> {user.phone_number}
+                                </Typography>
+                            </Grid2>
+                        )}
+                    </Grid2>
+                </Grid2>
+            </Paper>
         </div>
     );
 };

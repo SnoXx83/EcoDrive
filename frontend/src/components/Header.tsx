@@ -2,60 +2,65 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { UserContext } from "./Layout";
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 
 export default function Header() {
     const authInfo = useContext(UserContext);
     const router = useRouter();
 
     return (
-        <header className="header">
-            <div className="main-menu">
-                <h1>
-                    <a href="/">
-                        <p><span>Eco</span>Drive</p>
-                    </a>
-                </h1>
-                <div className="nav">
+        <AppBar sx={{
+            backgroundColor: "#114360"
+        }} position="fixed">
+            <Toolbar>
+                <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                    <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <span>Eco</span>Drive
+                    </Link>
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 3 }}>
                     {authInfo.isLoggedIn ? (
                         <>
                             {authInfo.role === "passenger" && (
                                 <>
-                                    <Link href="/trip/searchTrip">
-                                        <span>Trouver un trajet</span>
-                                    </Link>
-                                    <Link href={`/profile/${authInfo.userId}`}>
-                                        <span>Mon profil</span>
-                                    </Link>
+                                    <Button color="inherit" component={Link} href="/trip/searchTrip">
+                                        Trouver un trajet
+                                    </Button>
+                                    <Button color="inherit" component={Link} href={`/profile/${authInfo.userId}`}>
+                                        Mon profil
+                                    </Button>
                                 </>
                             )}
                             {authInfo.role === "driver" && (
                                 <>
-                                    <Link href="/trip/new">
-                                        <span>Publier un trajet</span>
-                                    </Link>
-                                    <Link href={`/profile/${authInfo.userId}`}>
-                                        <span>Mon profil</span>
-                                    </Link>
+                                    <Button color="inherit" component={Link} href="/trip/new">
+                                        Publier un trajet
+                                    </Button>
+                                    <Button color="inherit" component={Link} href={`/profile/${authInfo.userId}`}>
+                                        Mon profil
+                                    </Button>
                                 </>
                             )}
-                            <button onClick={() => {
+                            <Button color="inherit" onClick={() => {
                                 localStorage.removeItem("jwt");
                                 authInfo.refetchLogin();
                                 router.push("/");
-                            }}>Déconnexion</button>
+                            }}>
+                                Déconnexion
+                            </Button>
                         </>
                     ) : (
                         <>
-                            <Link href="/login">
-                                <span>Se connecter</span>
-                            </Link>
-                            <Link href={"/register"}>
-                                <span>S'inscrire</span>
-                            </Link>
+                            <Button color="inherit" component={Link} href="/login">
+                                Se connecter
+                            </Button>
+                            <Button color="inherit" component={Link} href="/register">
+                                S'inscrire
+                            </Button>
                         </>
                     )}
-                </div>
-            </div>
-        </header>
+                </Box>
+            </Toolbar>
+        </AppBar>
     )
 }
