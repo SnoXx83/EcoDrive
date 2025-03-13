@@ -38,6 +38,7 @@ export class User extends BaseEntity {
     @Column()
     phone_number: string;
 
+    @Field()
     @Column({
         type: 'enum',
         enum: ["admin", "passenger", "driver"],

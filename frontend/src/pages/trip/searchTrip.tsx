@@ -4,6 +4,11 @@ import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { GET_TRIPS_BY_CRITERIA } from '@/graphql/queries/queries';
 import Link from 'next/link';
 import { UserContext } from '@/components/Layout';
+import { Dayjs } from 'dayjs';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { Controller, useForm } from 'react-hook-form';
 
 interface Trip {
     id: string;
@@ -17,7 +22,12 @@ interface Trip {
 }
 
 const SearchTrips: React.FC = () => {
-    const [departureTime, setDepartureTime] = useState<string>('');
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            departure_time: null,
+        },
+    });
+    // const [departureTime, setDepartureTime] = useState<Dayjs | null>(null);
     const [startLocation, setStartLocation] = useState<string>('');
     const [endLocation, setEndLocation] = useState<string>('');
     const [trips, setTrips] = useState<Trip[]>([]);
@@ -42,10 +52,11 @@ const SearchTrips: React.FC = () => {
         setEndLocation(ville.nom);
     };
 
-    const handleSearch = () => {
+    const handleSearch = (data: {departure_time: Dayjs | null}) => {
         getTrips({
             variables: {
-                departureTime,
+                // departureTime,
+                departureTime: data.departure_time?.toISOString(),
                 startLocation,
                 endLocation,
             },
@@ -56,25 +67,34 @@ const SearchTrips: React.FC = () => {
         <div className='main-search'>
             <h2 className='m-10'>Rechercher des trajets</h2>
             <br />
-            <form onSubmit={(e) => {
-                e.preventDefault();
-            }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <form onSubmit={handleSubmit(handleSearch)}>
 
-                <div className='d-flex justify-around item-center'>
-                    <div className='flex-column m-10'>
-                        <label>
-                            Date & heure de départ :
-                            <br />
-                            <input type="datetime-local" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)} />
-                        </label>
-                    </div>
+                <div className='p-10 d-flex justify-around item-center'>
+                <DemoContainer components={['DateTimePicker']}>
+                            <Controller
+                                name="departure_time"
+                                control={control}
+                                defaultValue={null}
+                                rules={{ required: 'La date et l\'heure de départ sont requises.' }}
+                                render={({ field }) => (
+                                    <DateTimePicker
+                                        label="Date & heure de départ"
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        sx={{ m: 1 }}
+                                    />
+                                )}
+                            />
+                        </DemoContainer>
                     <LocationSearch name="ville de départ" label="start_location" onSelect={handleVilleDepartSelect} />
                     <LocationSearch name="ville d'arrivée" label="end_location" onSelect={handleVilleArriveeSelect} />
-                    <button className="btn" onClick={handleSearch} disabled={loading}>
+                    <button className="btn" type="submit" disabled={loading}>
                         Rechercher
                     </button>
                 </div>
             </form>
+            </LocalizationProvider>
 
             {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
 

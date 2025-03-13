@@ -1,3 +1,4 @@
+import { List, ListItem, ListItemButton, TextField } from '@mui/material';
 import { useState, useEffect, useRef } from 'react';
 
 export interface Ville {
@@ -46,16 +47,42 @@ const LocationSearch: React.FC<VilleProps> = ({ name, label, onSelect, initialVa
 
   return (
     <div className='m-10 section_suggestions'>
-      <label htmlFor={label}>{name} :</label>
-      <br />
-      <input type="text" id={label} value={inputValue} onChange={handleInputChange} />
-      <ul className='suggestions'>
-        {suggestions.map((ville) => (
-          <li key={ville.code} onClick={() => handleSuggestionClick(ville)}>
-            {ville.nom}
-          </li>
-        ))}
-      </ul>
+      <TextField
+                label={name}
+                id={label}
+                value={inputValue}
+                onChange={handleInputChange}
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                      '& fieldset': {
+                          borderBottom: suggestions.length > 0 ? 'none' : '', // Supprime la bordure inférieure si des suggestions sont présentes
+                      },
+                  },
+              }}
+            />
+             {suggestions.length > 0 && (
+            <List
+                sx={{
+                    position: 'absolute',
+                    top: '100%', // Positionne la liste sous le champ de texte
+                    backgroundColor: 'white',
+                    width: '225px', // Ajustez la largeur selon vos besoins
+                    zIndex: 1000,
+                    border: '1px solid #ccc',
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                }}
+            >
+               {suggestions.map((ville) => (
+                    <ListItem key={ville.code} disablePadding>
+                        <ListItemButton onClick={() => handleSuggestionClick(ville)}>
+                            {ville.nom}
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+             )}
     </div>
   );
 };

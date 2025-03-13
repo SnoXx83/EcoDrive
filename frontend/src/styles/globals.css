@@ -53,6 +53,10 @@ a {
   text-decoration: none;
 }
 
+.text-center{
+  text-align: center;
+}
+
 /* MARGIN */
 .m-10 {
   margin: 10px;
@@ -176,7 +180,7 @@ form {
   /* display: flex; */
   flex-direction: column;
   /* background-color: #efefef; */
-  background-color: #114360;
+  background-color: #e7e7e7;
   color: #f5f5f5;
   font-size: large;
   border-radius: 20px;

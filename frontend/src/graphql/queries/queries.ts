@@ -59,3 +59,17 @@ query WhoAmI {
   }
 }
 `;
+
+export const GET_USER_BY_ID = gql`
+  query GetUserById($id: Float!) {
+    getUserById(id: $id) {
+      id
+      imageUrl
+      first_name
+      last_name
+      email
+      phone_number
+      role
+    }
+  }
+`;

@@ -19,14 +19,24 @@ export default function Header() {
                     {authInfo.isLoggedIn ? (
                         <>
                             {authInfo.role === "passenger" && (
-                                <Link href="/trip/searchTrip">
-                                    <span>Trouver un trajet</span>
-                                </Link>
+                                <>
+                                    <Link href="/trip/searchTrip">
+                                        <span>Trouver un trajet</span>
+                                    </Link>
+                                    <Link href={`/profile/${authInfo.userId}`}>
+                                        <span>Mon profil</span>
+                                    </Link>
+                                </>
                             )}
                             {authInfo.role === "driver" && (
-                                <Link href="/trip/new">
-                                    <span>Publier un trajet</span>
-                                </Link>
+                                <>
+                                    <Link href="/trip/new">
+                                        <span>Publier un trajet</span>
+                                    </Link>
+                                    <Link href={`/profile/${authInfo.userId}`}>
+                                        <span>Mon profil</span>
+                                    </Link>
+                                </>
                             )}
                             <button onClick={() => {
                                 localStorage.removeItem("jwt");

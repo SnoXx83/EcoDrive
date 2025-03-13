@@ -1,5 +1,7 @@
 import { REGISTER_MUTATION } from "@/graphql/mutations/mutations";
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { useMutation } from "@apollo/client";
+import { Button, IconButton, TextField } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,7 +16,7 @@ export default function RegistrationPage() {
         handleSubmit,
         formState: { errors }
     } = useForm();
-    
+
 
     const getErrorMessage = (error: any): string | undefined => {
         if (error && error.message && typeof error.message === 'string') {
@@ -47,68 +49,95 @@ export default function RegistrationPage() {
 
     return (
         <div className="main">
-            <input
-                type="file"
-                onChange={async (e) => {
-                    if (e.target.files) {
-                        setFile(e.target.files[0]);
-                        const url = "http://localhost:8000/upload";
-                        const formData = new FormData();
-                        formData.append(
-                            "file",
-                            e.target.files[0],
-                            e.target.files[0].name
-                        );
-                        try {
-                            const response = await axios.post(url, formData);
-                            setImageURL(response.data.filename);
-                        } catch (err) {
-                            console.log("error", err);
-                        }
-                    }
-                }}
-            />
-            {imageURL ? (
-                <>
-                    <br />
-                    <img style={{
-                        borderRadius: `50%`
-                    }} width={"90"} height={"90"} alt="uploadedImg" src={`http://localhost:8000${imageURL}`} />
-                    <br />
-                </>
-            ) : null}
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label className='m-10'>
-                    Nom : <br />
-                    <input className="text-field" type='text' {...register("lastName", { required: "Nom requis" })} />
-                    {getErrorMessage(errors.lastName) && <p>{getErrorMessage(errors.lastName)}</p>}
-                </label>
+                <div className="text-center">
+                    <IconButton color="primary" aria-label="upload picture" component="label" htmlFor="upload-photo">
+                        <PhotoCameraIcon />
+                    </IconButton>
+                    {imageURL ? (
+                        <>
+                            <br />
+                            <img style={{
+                                borderRadius: `50%`
+                            }} width={"90"} height={"90"} alt="uploadedImg" src={`http://localhost:8000${imageURL}`} />
+                            <br />
+                        </>
+                    ) : null}
+                    <input className="text-center"
+                        type="file"
+                        onChange={async (e) => {
+                            if (e.target.files) {
+                                setFile(e.target.files[0]);
+                                const url = "http://localhost:8000/upload";
+                                const formData = new FormData();
+                                formData.append(
+                                    "file",
+                                    e.target.files[0],
+                                    e.target.files[0].name
+                                );
+                                try {
+                                    const response = await axios.post(url, formData);
+                                    setImageURL(response.data.filename);
+                                } catch (err) {
+                                    console.log("error", err);
+                                }
+                            }
+                        }}
+                    />
+                </div>
+                <TextField
+                    required
+                    label="Nom"
+                    {...register("lastName", { required: "Nom requis" })}
+                    error={!!errors.lastName}
+                    helperText={getErrorMessage(errors.lastName)}
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    required
+                    label="Prénom"
+                    {...register("firstName", { required: "Prénom requis" })}
+                    error={!!errors.firstName}
+                    helperText={getErrorMessage(errors.firstName)}
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    required
+                    label="Numéro de téléphone"
+                    {...register("phoneNumber", { required: "Téléphone requis" })}
+                    error={!!errors.phoneNumber}
+                    helperText={getErrorMessage(errors.phoneNumber)}
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    required
+                    label="Email"
+                    {...register("email", { required: "Email requis" })}
+                    error={!!errors.email}
+                    helperText={getErrorMessage(errors.email)}
+                    fullWidth
+                    margin="normal"
+                    type="email"
+                />
+                <TextField
+                    required
+                    label="Mot de passe"
+                    {...register("password", { required: "Mot de passe requis" })}
+                    error={!!errors.password}
+                    helperText={getErrorMessage(errors.password)}
+                    fullWidth
+                    margin="normal"
+                    type="password"
+                />
                 <br />
-                <label className='m-10'>
-                    Prénom : <br />
-                    <input className="text-field" type='text' {...register("firstName", { required: "Prénom requis" })} />
-                    {getErrorMessage(errors.firstName) && <p>{getErrorMessage(errors.firstName)}</p>}
-                </label>
-                <br />
-                <label className='m-10'>
-                    Numéro de téléphone : <br />
-                    <input className="text-field" type='text' {...register("phoneNumber", { required: "téléphone requis" })} />
-                    {getErrorMessage(errors.phoneNumber) && <p>{getErrorMessage(errors.phoneNumber)}</p>}
-                </label>
-                <br />
-                <label className='m-10'>
-                    Email : <br />
-                    <input className="text-field" type='email' {...register("email", { required: "Email requis" })} />
-                    {getErrorMessage(errors.email) && <p>{getErrorMessage(errors.email)}</p>}
-                </label>
-                <br />
-                <label className='m-10'>
-                    Mot de passe : <br />
-                    <input className="text-field" type='password' {...register("password", { required: "Mot de passe requis" })} />
-                    {getErrorMessage(errors.password) && <p>{getErrorMessage(errors.password)}</p>}
-                </label>
-                <br />
-                <button type="submit" onSubmit={(e) => { e.preventDefault(); }}>S'inscrire</button>
+                <div className="m-10 d-flex justify-center">
+                    <Button variant="contained" type="submit">
+                        S'inscrire
+                    </Button>
+                </div>
             </form>
         </div>
     );

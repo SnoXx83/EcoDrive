@@ -1,6 +1,7 @@
 import { UserContext } from "@/components/Layout";
 import { LOGIN_QUERY } from "@/graphql/queries/queries";
 import { useLazyQuery } from "@apollo/client";
+import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
@@ -30,17 +31,27 @@ export default function LoginPage() {
                     },
                 });
             }}>
-                <label>
-                    Email :
-                    <input type="text" name="email" />
-                </label>
-                <br />
-                <label>
-                    Mot de passe :
-                    <input type="password" name="password" id="" />
-                </label>
-                <br />
-                <button type="submit" onSubmit={(e) => { e.preventDefault(); }}>Se connecter</button>
+                <TextField
+                    required
+                    id="email"
+                    label="Email"
+                    variant="outlined"
+                    name="email"
+                    type="text"
+                    fullWidth
+                    margin="normal"
+                />
+                <TextField
+                    required
+                    id="password"
+                    label="Mot de passe"
+                    variant="outlined"
+                    name="password"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                />
+                <Button type="submit" onSubmit={(e) => { e.preventDefault(); }} variant="contained">Se connecter</Button>
             </form>
         </div>
     );

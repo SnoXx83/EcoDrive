@@ -89,4 +89,13 @@ export class UserResolver {
             return { isLoggedIn: false };
         }
     }
+
+    @Query(() => User, { nullable: true })
+    async getUserById(@Arg('id') id: number) {
+        const userId= id;
+        if (isNaN(userId)) {
+            return null; // Gérer le cas où id n'est pas un nombre valide
+        }
+        return User.findOne({ where: {id: userId} });
+    }
 }
