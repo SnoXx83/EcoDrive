@@ -3,7 +3,6 @@ import { useLazyQuery } from '@apollo/client';
 import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { GET_TRIPS_BY_CRITERIA } from '@/graphql/queries/queries';
 import Link from 'next/link';
-import { UserContext } from '@/components/Layout';
 import { Dayjs } from 'dayjs';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

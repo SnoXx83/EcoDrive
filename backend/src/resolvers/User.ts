@@ -1,4 +1,4 @@
-import { Arg, Authorized, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
+import { Arg, AuthenticationError, Authorized, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import { User } from "../entities/user";
 import { UserInput } from "../inputs/user";
 import * as jwt from "jsonwebtoken";
@@ -58,6 +58,7 @@ export class UserResolver {
             newUser.imageUrl = newUserData.imageUrl;
             newUser.phone_number = newUserData.phone_number;
             newUser.hashedPassword = await argon2.hash(newUserData.password);
+            newUser.role = newUserData.role;
             await newUser.save();
             return newUser;
         } catch (error) {
@@ -72,7 +73,7 @@ export class UserResolver {
         try {
             const user = await User.findOneByOrFail({ email: UserData.email });
             if (!(await argon2.verify(user.hashedPassword, UserData.password))) {
-                return "invalid password";
+                throw new AuthenticationError("Mot de passe invalide");
             } else {
                 const payload = { email: user.email, role: user.role };
                 const token = jwt.sign(payload, "mysupersecretkey");
@@ -80,7 +81,10 @@ export class UserResolver {
             }
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
-            return "Erreur lors de la connexion";
+            if (error instanceof AuthenticationError) {
+                throw error;
+            }
+            throw new Error("Erreur lors de la connexion");
         }
     }
 

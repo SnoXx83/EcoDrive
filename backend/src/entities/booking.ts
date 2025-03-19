@@ -29,7 +29,7 @@ export class Booking extends BaseEntity{
 
     // // Une réservation est liée à un seul trajet.
     @Field(()=> Trip)
-    @ManyToOne(()=> Trip, (trip)=> trip.bookings)
+    @ManyToOne(()=> Trip, (trip)=> trip.bookings, {onDelete:"CASCADE"})
     trip: Trip;
 
 }

@@ -1,4 +1,5 @@
 import { InputType, Field } from "type-graphql";
+import { UserRoleType } from "../entities/user";
 
 // Input d'inscription rename register
 @InputType()
@@ -20,4 +21,7 @@ export class UserInput {
 
     @Field()
     phone_number: string;
+
+    @Field(() => String)
+    role: UserRoleType;
 }

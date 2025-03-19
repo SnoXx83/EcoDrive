@@ -43,7 +43,7 @@ export class TripResolver {
         const where: any = {};
         
         if (departureTime) {
-            where.departure_time = MoreThanOrEqual(departureTime); // Utilisation de MoreThanOrEqual
+            where.departure_time = MoreThanOrEqual(departureTime); 
           }
 
         if (startLocation) {
@@ -71,6 +71,7 @@ export class TripResolver {
         const trip = Trip.create({
             ...tripData,
             driver: user,
+            owner: ctx.email,
         })
         return await trip.save();
     }

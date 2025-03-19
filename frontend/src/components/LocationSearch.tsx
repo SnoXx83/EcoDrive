@@ -13,7 +13,7 @@ interface VilleProps {
   initialValue?: string;
 }
 
-const LocationSearch: React.FC<VilleProps> = ({ name, label, onSelect, initialValue }) => {
+const LocationSearch = ({ name, label, onSelect, initialValue }: VilleProps) => {
   const [inputValue, setInputValue] = useState<string>(initialValue || '');
   const [suggestions, setSuggestions] = useState<Ville[]>([]);
   const initialValueRef = useRef(initialValue);
@@ -56,7 +56,7 @@ const LocationSearch: React.FC<VilleProps> = ({ name, label, onSelect, initialVa
                 sx={{
                   '& .MuiOutlinedInput-root': {
                       '& fieldset': {
-                          borderBottom: suggestions.length > 0 ? 'none' : '', // Supprime la bordure inférieure si des suggestions sont présentes
+                          borderBottom: suggestions.length > 0 ? 'none' : '', 
                       },
                   },
               }}
@@ -65,9 +65,9 @@ const LocationSearch: React.FC<VilleProps> = ({ name, label, onSelect, initialVa
             <List
                 sx={{
                     position: 'absolute',
-                    top: '100%', // Positionne la liste sous le champ de texte
+                    top: '100%', 
                     backgroundColor: 'white',
-                    width: '225px', // Ajustez la largeur selon vos besoins
+                    width: '225px', 
                     zIndex: 1000,
                     border: '1px solid #ccc',
                     maxHeight: '200px',

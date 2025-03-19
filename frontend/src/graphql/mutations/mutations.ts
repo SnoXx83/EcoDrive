@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-// Création d'une mutation GraphQL à l'aide de la balise littérale gql
+
 // Schéma mutation creer un nouveau trajet
 export const CREATE_NEW_TRIP = gql` 
 mutation Mutation($tripData: TripInput!) {
@@ -10,7 +10,7 @@ mutation Mutation($tripData: TripInput!) {
 `
 // Schéma mutation update un trajet
 export const UPDATE_TRIP = gql`
-  mutation UpdateTrip($id: Float!, $tripData: TripInput!) {
+  mutation UpdateTrip($id: Float!, $tripData: TripUpdateInput!) {
     updateTrip(id: $id, tripData: $tripData) {
       id
       departure_time
@@ -46,6 +46,7 @@ export const REGISTER_MUTATION = gql`
       email
       first_name
       last_name
+      role
     }
   }
 `;

@@ -22,10 +22,6 @@ const Reservation: React.FC = () => {
     const { userId } = useContext(UserContext);
     const [isUserReady, setIsUserReady] = useState(false);
 
-    // if (userId) {
-    //     console.log("ID de l'utilisateur dans Layout :", userId);
-    //   }
-
     useEffect(() => {
         if (userId) {
             setIsUserReady(true);
