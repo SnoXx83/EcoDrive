@@ -1,0 +1,34 @@
+name: docker
+
+on: push
+
+jobs:
+  docker:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo the default context
+        run: echo "${{defaultContext}}"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push client
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: "{{defaultContext}}:EcoDrive/frontend"
+          file: "Dockerfile.prod"
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgc-front:latest
+      - name: Build and push server
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: "{{defaultContext}}:EcoDrive/backend"
+          file: "Dockerfile.prod"
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgc-back:latest
