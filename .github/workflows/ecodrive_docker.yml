@@ -22,8 +22,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          context: "{{defaultContext}}:EcoDrive/frontend"
-          file: "Dockerfile.prod"
+          context: ./frontend
+          file: ./frontend/Dockerfile.prod
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgc-front:latest
       - name: Build and push server
         uses: docker/build-push-action@v4
