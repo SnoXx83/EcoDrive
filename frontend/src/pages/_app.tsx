@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 
 //  création d'un lien HTTP pour se connecter au serveur GraphQL.
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
+  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
 
 //  crée un lien Apollo qui modifie les headers des requêtes GraphQL.
