@@ -3,11 +3,14 @@ import "../styles/globals.css";
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import type { AppProps } from "next/app";
+import getConfig from "next/config";
 import dynamic from "next/dynamic";
+
+const { publicRuntimeConfig } = getConfig();
 
 //  création d'un lien HTTP pour se connecter au serveur GraphQL.
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_BACKEND_URL,
+  uri: publicRuntimeConfig.BACKEND_URL,
 });
 
 //  crée un lien Apollo qui modifie les headers des requêtes GraphQL.
