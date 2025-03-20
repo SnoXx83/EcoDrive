@@ -5,7 +5,7 @@ import { setContext } from "@apollo/client/link/context";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 
-let backend_url;
+let backend_url = "/graphql";
 
 if (typeof window !== "undefined") {
   if (window.location.origin.startsWith("http://localhost")) {
@@ -24,7 +24,7 @@ const httpLink = createHttpLink({
 
 //  crée un lien Apollo qui modifie les headers des requêtes GraphQL.
 const authLink = setContext((_, { headers }) => {
-// A chaque requete il recupere le token JWT du localStorage
+  // A chaque requete il recupere le token JWT du localStorage
   const token = localStorage.getItem("jwt");
   // si token il existe, il ajoute un header authorization avec la valeur sinon header vide
   return {

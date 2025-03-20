@@ -9,7 +9,7 @@ interface RegistrationFormProps {
 
 const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     const [file, setFile] = useState<File>();
-    const [imageURL, setImageURL] = useState<String>('');
+    const [imageURL, setImageURL] = useState<string>();
     const [role, setRole] = useState<string>("passenger");
 
     const handleSubmit = (e: FormEvent) => {
@@ -26,7 +26,7 @@ const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
             try {
             const formData = new FormData();
             formData.append("file", e.target.files[0], e.target.files[0].name);
-            const url = "http://localhost:8000/upload";
+            const url = "/upload";
             const response = await axios.post(url, formData);
             const filename = response.data.filename;
                 setImageURL(filename);
@@ -47,7 +47,7 @@ const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
                 <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
                     <IconButton color="primary" aria-label="upload picture" component="label" htmlFor="upload-photo">
                         {imageURL ? (
-                            <Avatar src={`http://localhost:8000${imageURL}`} data-testid="avatar-image" sx={{ width: 90, height: 90 }} />
+                            <Avatar src={imageURL} data-testid="avatar-image" sx={{ width: 90, height: 90 }} />
                         ) : (
                             <PhotoCameraIcon sx={{ width: 90, height: 90 }} />
                         )}
