@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import dataSource from "../config/db";
+import dataSource from "./config/db";
 import { ApolloServer } from "@apollo/server";
 import * as jwt from "jsonwebtoken";
 import { startStandaloneServer } from '@apollo/server/standalone';

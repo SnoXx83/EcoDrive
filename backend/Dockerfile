@@ -1,14 +1,24 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as builder
 
 WORKDIR /app
 
 COPY package.json package.json
 RUN npm install
 
-COPY config config
 COPY tsconfig.json tsconfig.json
 COPY src src
 
+RUN npm run build
+
+FROM node:lts-alpine as runner
+
 RUN apk add --no-cache curl
 
-CMD npm start
+WORKDIR /app
+
+COPY --from=builder /app/dist /app/dist
+
+COPY package.json package.json
+RUN npm install --omit-dev
+
+CMD npm run startprod

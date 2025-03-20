@@ -4,9 +4,8 @@ import { UserInput } from "../inputs/user";
 import * as jwt from "jsonwebtoken";
 import * as argon2 from "argon2";
 import { LoginInput } from "../inputs/login";
-import { getRepository } from "typeorm";
 import { UpdateUserInput } from "../inputs/updateUser";
-import dataSource from "../../config/db";
+import dataSource from "../config/db";
 
 // Input de connection
 @ObjectType()
