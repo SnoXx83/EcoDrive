@@ -1,6 +1,8 @@
 services:
   backend:
     build: ./backend
+    ports:
+      - "4000:4000"
     volumes:
       - ./backend/src:/app/src
     healthcheck:
@@ -14,7 +16,8 @@ services:
 
   frontend:
     build: ./frontend
-    command: npm start
+    ports:
+      - "3000:3000"
     volumes:
       - ./frontend/src:/app/src
     depends_on:
@@ -36,6 +39,8 @@ services:
     volumes:
       - ./imagesupload/src:/app/src
       - ./imagesupload/uploads:/app/uploads
+    ports:
+      - 8000:8000
   adminer:
     image: adminer
     ports:

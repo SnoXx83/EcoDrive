@@ -21,7 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     // useQuery exécute la requête GET_AUTH_INFO sur le serveur GraphQL
     const { data, loading, error, refetch } = useQuery<{
         // Type de reponse gaphql
-        whoAmI: { isLoggedIn: boolean; userId: any | null; email: string; role: string };
+        whoAmI: { isLoggedIn: boolean; userId: number | null; email: string; role: string };
     }>(GET_AUTH_INFO);
 
     if (loading) {

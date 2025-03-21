@@ -1,6 +1,6 @@
 import React from 'react';
 // import { act, waitFor, fireEvent, render } from '@testing-library/react';
-import { render, screen, act, fireEvent, waitFor } from '@testing-library/react';
+import { render, act, fireEvent, waitFor } from '@testing-library/react';
 import RegistrationPage from '../pages/register';
 import { MockedProvider } from '@apollo/client/testing';
 import { REGISTER_MUTATION } from '@/graphql/mutations/mutations';

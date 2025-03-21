@@ -1,23 +1,55 @@
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { Avatar, Box, Button, FormControlLabel, IconButton, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import React, { useState, FormEvent, act, useEffect } from "react";
+import React, { useState, FormEvent} from "react";
+
+interface RegistrationFormData {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    password: string;
+    role: string;
+    imageUrl?: string;
+}
 
 interface RegistrationFormProps {
-    onSubmit: (data: any) => void;
+    onSubmit: (data: RegistrationFormData) => void;
 }
 
 const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
-    const [file, setFile] = useState<File>();
+    const [file,setFile] = useState<File>();
     const [imageURL, setImageURL] = useState<string>();
     const [role, setRole] = useState<string>("passenger");
 
+    console.log(file);
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        onSubmit({ ...data, imageUrl: imageURL, role: role });
+        // const data = Object.fromEntries(formData.entries());
+        const data = Object.fromEntries(formData.entries()) as {
+            firstName?: string;
+            lastName?: string;
+            phoneNumber?: string;
+            email?: string;
+            password?: string;
+          };
+        // onSubmit({ ...data, imageUrl: imageURL, role: role });
+        if (!data.firstName || !data.lastName || !data.phoneNumber || !data.email || !data.password) {
+            console.error("Missing required fields in form data.");
+            return; // Stop execution if required fields are missing
+          }
+        
+          onSubmit({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            email: data.email,
+            password: data.password,
+            imageUrl: imageURL,
+            role: role,
+          });
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +111,7 @@ const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
                 </RadioGroup>
                 <Box mt={2} display="flex" justifyContent="center">
                     <Button variant="contained" type="submit">
-                        S'inscrire
+                        S&apos;inscrire
                     </Button>
                 </Box>
             </form>

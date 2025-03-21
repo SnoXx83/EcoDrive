@@ -1,4 +1,3 @@
-// components/TripEditForm.tsx
 import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { UPDATE_TRIP } from '@/graphql/mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
@@ -32,9 +31,7 @@ const TripEditForm: React.FC<TripEditFormProps> = ({ tripId, onSuccess }) => {
     const {
         register,
         handleSubmit,
-        formState: { errors: formErrors, isSubmitting },
         setValue,
-        reset,
         control,
     } = useForm<Inputs>({
         defaultValues: {
@@ -61,7 +58,7 @@ const TripEditForm: React.FC<TripEditFormProps> = ({ tripId, onSuccess }) => {
         }
     }, [data, setValue]);
 
-    const [updateTrip, { loading: updateTripLoading, error: updateTripError }] = useMutation(UPDATE_TRIP);
+    const [updateTrip] = useMutation(UPDATE_TRIP);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -95,8 +92,13 @@ const TripEditForm: React.FC<TripEditFormProps> = ({ tripId, onSuccess }) => {
             if (onSuccess) {
                 onSuccess();
             }
-        } catch (error: any) {
-            setErrorMessage(error.message || "Une erreur est survenue.");
+        } catch (error: unknown) {
+            // setErrorMessage(error.message || "Une erreur est survenue.");
+            if (error instanceof Error) {
+                setErrorMessage(error.message || "Une erreur est survenue.");
+              } else {
+                setErrorMessage("Une erreur inconnue est survenue.");
+              }
         }
     };
 

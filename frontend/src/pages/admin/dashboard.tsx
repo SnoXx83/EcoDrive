@@ -4,6 +4,20 @@ import { useMutation, useQuery } from "@apollo/client"
 import { Box, Button, Paper, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs } from "@mui/material";
 import { useState } from "react";
 
+interface User {
+    id: number;
+    last_name: string;
+    first_name: string;
+    email: string;
+  }
+
+  interface Trip {
+    id: number;
+    departure_time: string;
+    start_location: string;
+    end_location: string;
+  }
+
 export default function Dashboard() {
     const { loading: usersLoading, error: usersError, data: useresData } = useQuery(GET_ALL_USERS);
     const { loading: tripsLoading, error: tripsError, data: tripsData } = useQuery(GET_ALL_TRIPS);
@@ -11,6 +25,7 @@ export default function Dashboard() {
     const [deleteTrip] = useMutation(DELETE_TRIP);
     const [value, setValue] = useState(0);
 
+    console.log(deleteTrip);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
@@ -46,7 +61,7 @@ export default function Dashboard() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {useresData?.getAllUsers?.map((user: any) => (
+                                    {useresData?.getAllUsers?.map((user: User) => (
                                         <TableRow key={user.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell component="th" scope="row">{user.id}</TableCell>
                                             <TableCell align="left">{user.email}</TableCell>
@@ -76,12 +91,12 @@ export default function Dashboard() {
                                         <TableCell>ID</TableCell>
                                         <TableCell align="left">Date & Heure</TableCell>
                                         <TableCell align="left">Ville de départ</TableCell>
-                                        <TableCell align="left">Ville d'arrivée</TableCell>
+                                        <TableCell align="left">Ville d&#39;arrivée</TableCell>
                                         <TableCell align="left">Actions</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {tripsData?.getAllTrips?.map((trip: any) => (
+                                    {tripsData?.getAllTrips?.map((trip: Trip) => (
                                         <TableRow key={trip.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell component="th" scope="row">{trip.id}</TableCell>
                                             <TableCell align="left">{trip.departure_time}</TableCell>

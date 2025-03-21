@@ -3,9 +3,8 @@ import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { CREATE_NEW_TRIP } from '@/graphql/mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Controller, ControllerFieldState, ControllerRenderProps, FieldValues, SubmitHandler, useForm, UseFormStateReturn } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -29,14 +28,12 @@ const TripForm: React.FC<TripFormProps> = ({ onSuccess }) => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
         setValue,
         reset,
-        setValue: setFormValue,
         control,
     } = useForm<Inputs>();
 
-    const [createNewTrip, { loading: createTripLoading, error: createTripError }] = useMutation(CREATE_NEW_TRIP);
+    const [createNewTrip] = useMutation(CREATE_NEW_TRIP);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -71,8 +68,13 @@ const TripForm: React.FC<TripFormProps> = ({ onSuccess }) => {
             if (onSuccess) {
                 onSuccess(); // Appel de la fonction de gestion du succès
             }
-        } catch (error: any) {
-            setErrorMessage(error.message || "Une erreur est survenue.");
+        } catch (error) {
+            // setErrorMessage(error.message || "Une erreur est survenue.");
+            if (error instanceof Error) {
+                setErrorMessage(error.message || "Une erreur est survenue.");
+              } else {
+                setErrorMessage("Une erreur inconnue est survenue.");
+              }
         }
     };
 

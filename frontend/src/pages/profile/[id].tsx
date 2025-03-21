@@ -17,6 +17,8 @@ export interface UserInput {
     phone_number?: string;
 }
 
+
+
 const ProfilePage = () => {
     const router = useRouter();
     const nextRouter = useNextRouter();
@@ -29,6 +31,8 @@ const ProfilePage = () => {
             nextRouter.push('/login');
         }
     }, [isLoggedIn, nextRouter]);
+
+    console.log(userId);
 
     const { data, loading, error, refetch } = useQuery(GET_USER_BY_ID, {
         variables: { id: parseInt(id as string, 10) },
@@ -69,7 +73,7 @@ const ProfilePage = () => {
         }
     };
 
-    const handleChange = (e: { target: { name: any; value: any; }; }) => {
+    const handleChange = (e: { target: { name:string; value:string ; }; }) => {
         setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
     };
 

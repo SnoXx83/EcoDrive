@@ -10,15 +10,16 @@ COPY src src
 
 RUN npm run build
 
-FROM node:lts-alpine as runner
+# FROM node:lts-alpine as runner
 
-RUN apk add --no-cache curl
+# RUN apk add --no-cache curl
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY --from=builder /app/dist /app/dist
+# COPY --from=builder /app/dist /app/dist
 
-COPY package.json package.json
-RUN npm install --omit-dev
+# COPY package.json package.json
+# RUN npm install --omit-dev
 
-CMD npm run startprod
+
+# CMD npm run startprod

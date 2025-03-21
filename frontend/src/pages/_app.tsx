@@ -5,17 +5,17 @@ import { setContext } from "@apollo/client/link/context";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 
-let backend_url = "/graphql";
-
-if (typeof window !== "undefined") {
-  if (window.location.origin.startsWith("http://localhost")) {
-    backend_url = "http://localhost:4000";
-  } else {
-    backend_url = "/graphql";
-  }
-}
+const backend_url = "/graphql";
 
 console.log("backend url", backend_url);
+// if (typeof window !== "undefined") {
+//   if (window.location.origin.startsWith("http://localhost")) {
+//     backend_url = "http://localhost:4000";
+//   } else {
+//     backend_url = "/graphql";
+//   }
+// }
+
 
 //  création d'un lien HTTP pour se connecter au serveur GraphQL.
 const httpLink = createHttpLink({

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import LocationSearch, { Ville } from '@/components/LocationSearch';
 import { GET_TRIPS_BY_CRITERIA } from '@/graphql/queries/queries';
@@ -33,7 +33,7 @@ const SearchTrips: React.FC = () => {
     const [trips, setTrips] = useState<Trip[]>([]);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const [getTrips, { loading, error }] = useLazyQuery(GET_TRIPS_BY_CRITERIA, {
+    const [getTrips, { loading }] = useLazyQuery(GET_TRIPS_BY_CRITERIA, {
         onCompleted: (data) => {
             setTrips(data.getTripsByCriteria);
             setErrorMessage(null);
@@ -103,10 +103,16 @@ const SearchTrips: React.FC = () => {
                     <List>
                         {trips.map((trip) => (
                             <React.Fragment key={trip.id}>
-                                <ListItem component={Link} href={`/booking/${trip.id}`} button>
+                                {/* <ListItem component={Link} href={`/booking/${trip.id}`} button>
                                     <ListItemText
                                         primary={`Départ : ${trip.start_location} - Arrivée : ${trip.end_location}`}
                                         secondary={`Date : ${trip.departure_time} - Prix : ${trip.price}€`}
+                                    />
+                                </ListItem> */}
+                                <ListItem component={Link} href={`/booking/${trip.id}`}>
+                                    <ListItemText
+                                        primary={`Départ : ${trip.start_location} - Arrivée : ${trip.end_location}`}
+                                        secondary={`Date : ${trip.end_location} - Prix : ${trip.price} €`}
                                     />
                                 </ListItem>
                                 <Divider />

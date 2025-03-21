@@ -14,11 +14,11 @@ export default function Header() {
         }} position="fixed">
             <Toolbar>
                 <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-                    <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
                         <span>Eco</span>Drive
                     </Link>
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 3 }}>
+                <Box sx={{ display: "flex", gap: 3 }}>
                     {authInfo.isLoggedIn ? (
                         <>
                             {authInfo.role === "passenger" && (
@@ -55,7 +55,7 @@ export default function Header() {
                                 Se connecter
                             </Button>
                             <Button color="inherit" component={Link} href="/register">
-                                S'inscrire
+                                S&#39;inscrire
                             </Button>
                         </>
                     )}

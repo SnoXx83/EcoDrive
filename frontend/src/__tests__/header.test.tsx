@@ -77,6 +77,6 @@ describe('Header Component', () => {
 
         expect(removeItemMock).toHaveBeenCalledWith('jwt');
         expect(refetchLoginMock).toHaveBeenCalled();
-        expect((useRouter() as any).push).toHaveBeenCalledWith('/');
+        expect((useRouter()).push).toHaveBeenCalledWith('/');
     });
 });

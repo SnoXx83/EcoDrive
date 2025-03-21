@@ -41,7 +41,7 @@ const Reservation: React.FC = () => {
         skip: !tripId,
     });
 
-    const [createBooking, { loading: bookingLoading, error: bookingError }] =
+    const [createBooking, { loading: bookingLoading }] =
         useMutation(CREATE_BOOKING, {
             onCompleted: (data) => {
                 alert('Réservation effectuée avec succès !');

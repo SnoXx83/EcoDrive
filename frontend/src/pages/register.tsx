@@ -1,14 +1,26 @@
 import { REGISTER_MUTATION } from "@/graphql/mutations/mutations";
-import { useMutation } from "@apollo/client";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import RegisterForm from "@/components/RegisterForm";
 import { useRouter } from "next/router";
+import { useMutation } from "@apollo/client";
+
+interface RegistrationFormData {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    password: string;
+    role: string;
+    imageUrl?: string;
+  }
+
+
 export default function RegistrationPage() {
     const [registerMutation, { loading, error }] = useMutation(REGISTER_MUTATION);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [successMessage] = useState<string | null>(null);
     const router= useRouter();
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: RegistrationFormData) => {
         registerMutation({
             variables: {
                 newUserData: {
@@ -45,3 +57,4 @@ export default function RegistrationPage() {
         </Box>
     );
 }
+
