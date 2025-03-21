@@ -8,7 +8,7 @@ RUN npm install
 COPY tsconfig.json tsconfig.json
 COPY src src
 
-RUN npm run build
+RUN npm run start
 
 # FROM node:lts-alpine as runner
 

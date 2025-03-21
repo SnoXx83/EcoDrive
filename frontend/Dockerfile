@@ -13,6 +13,4 @@ COPY tsconfig.json tsconfig.json
 COPY src src
 
 
-RUN npm run build
-
-CMD ["npm", "start"]
+RUN npm run dev
