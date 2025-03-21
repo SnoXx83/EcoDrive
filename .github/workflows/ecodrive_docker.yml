@@ -1,34 +1,35 @@
-name: docker
+name: Docker Backend
 
-on: push
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
 
 jobs:
-  docker:
-    if: github.ref == 'refs/heads/main'
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: echo the default context
-        run: echo "${{defaultContext}}"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push client
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
+          context: ./backend
+          file: ./backend/Dockerfile.prod
           push: true
-          context: "{{defaultContext}}:EcoDrive/frontend"
-          file: "Dockerfile.prod"
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgc-front:latest
-      - name: Build and push server
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          context: "{{defaultContext}}:EcoDrive/backend"
-          file: "Dockerfile.prod"
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tgc-back:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ecodrive-backend:latest
